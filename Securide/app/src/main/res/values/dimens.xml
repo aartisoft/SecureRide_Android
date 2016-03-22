@@ -10,4 +10,6 @@
     <dimen name="dimen_5dp">5dp</dimen>
     <dimen name="dimen_150dp">150dp</dimen>
 
+    <dimen name="left_right_margin">15dp</dimen>
+
 </resources>

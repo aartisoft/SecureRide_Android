@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/background_color"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     android:orientation="vertical">
 
     <LinearLayout
@@ -58,20 +58,50 @@
 
         </LinearLayout>
 
-        <HorizontalScrollView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_60dp"
             android:layout_above="@+id/btn_confirm"
+            android:background="@android:color/white"
             android:layout_below="@+id/manual_location_parent">
 
             <LinearLayout
                 android:id="@+id/carParent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:orientation="horizontal"></LinearLayout>
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/left_right_margin"
+                android:paddingRight="@dimen/left_right_margin"
+                >
 
-        </HorizontalScrollView>
+                <LinearLayout
+                    android:id="@+id/llFirstCab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    >
+                    <include layout="@layout/adapter_cabmodel"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llSecondCab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <include layout="@layout/adapter_cabmodel"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/llThirdCabs"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <include layout="@layout/adapter_cabmodel"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_confirm"
@@ -79,7 +109,7 @@
             android:layout_height="@dimen/dimen_50dp"
             android:layout_alignParentBottom="true"
             android:background="@color/dark_green"
-            android:textColor="@color/white"
-            android:text="Confirm" />
+            android:text="Confirm"
+            android:textColor="@color/white" />
     </RelativeLayout>
 </LinearLayout>

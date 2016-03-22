@@ -34,12 +34,23 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
     private Button confirmBtn = null;
     private Context mContext = MapsActivity.this;
 
+    LinearLayout llFirstCab,llSecondCab,llThirdCabs;
+
+    int selectedCabIndex = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         mInflater = LayoutInflater.from(mContext);
+        llFirstCab = (LinearLayout) findViewById(R.id.llFirstCab);
+        llSecondCab = (LinearLayout) findViewById(R.id.llSecondCab);
+        llThirdCabs = (LinearLayout) findViewById(R.id.llThirdCabs);
+        List<CabModel> cabs = prepareCabsList();
+        prepareAndShowCabs(llFirstCab,cabs.get(0));
+        prepareAndShowCabs(llSecondCab,cabs.get(1));
+        prepareAndShowCabs(llThirdCabs,cabs.get(2));
 
         mPickupPoint = (EditText) findViewById(R.id.pick_point);
         mDropPoint = (EditText) findViewById(R.id.drop_point);
@@ -51,7 +62,7 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
         fragmentTransaction.add(R.id.temp_fragment, MapsFragment.newInstance(), "maps");
         fragmentTransaction.commitAllowingStateLoss();
 
-        prepareAndShowCabs();
+//        prepareAndShowCabs();
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +87,30 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
                 startActivity(new Intent(mContext, AddressSearchActivity.class));
             }
         });
+
+        llFirstCab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedCabIndex = 0;
+                updateCabSelection();
+            }
+        });
+        llSecondCab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedCabIndex = 1;
+                updateCabSelection();
+            }
+        });
+        llThirdCabs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedCabIndex = 2;
+                updateCabSelection();
+
+            }
+        });
+
     }
 
     @Override
@@ -88,25 +123,9 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
         }
     }
 
-    private void prepareAndShowCabs() {
-        for (int i = 0; i < prepareCabsList().size(); i++) {
-            CabModel cabModel = prepareCabsList().get(i);
-            final View view = mInflater.inflate(R.layout.adapter_cabmodel, null);
+    private void prepareAndShowCabs(LinearLayout view,CabModel cabModel) {
             ((TextView) view.findViewById(R.id.car_type)).setText(cabModel.name);
             ((ImageView) view.findViewById(R.id.car_image)).setImageResource(cabModel.image);
-            view.setTag(i);
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    view.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.white));
-                    if (view.getTag() == horizontalScrollView.indexOfChild(v)) {
-                        view.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.lighter_grey));
-                    }
-                }
-            });
-            horizontalScrollView.addView(view);
-        }
     }
 
     private List<CabModel> prepareCabsList() {
@@ -115,6 +134,19 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
         list.add(new CabModel("Regular", R.drawable.regular));
         list.add(new CabModel("Special", R.drawable.special));
         return list;
+    }
+
+    void updateCabSelection(){
+        llFirstCab.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.white));
+        llSecondCab.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.white));
+        llThirdCabs.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.white));
+        if (selectedCabIndex ==0){
+            llFirstCab.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.lighter_grey));
+        }else if (selectedCabIndex ==1){
+            llSecondCab.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.lighter_grey));
+        }else if (selectedCabIndex ==2){
+            llThirdCabs.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.lighter_grey));
+        }
     }
 
     @Override
