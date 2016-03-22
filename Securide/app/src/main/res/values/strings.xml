@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">SecuRide</string>
+
+
+
+    <string name="pickup_point">Pick up Point</string>
+    <string name="drop_point">Drop Point</string>
+    <string name="cab_arrival_time">Cab Arrival Time</string>
+    <string name="trip_estimated_time">Trip estimated Time</string>
+    <string name="cab_number">Cab Number</string>
+    <string name="driver_number">Driver Number</string>
+    <string name="estimated_cost">Estimated cost of Trip</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_api_key">AIzaSyAWnFyU3mB6JG616DCmi6p_v3Q988NW1Dg</string>
+</resources>
