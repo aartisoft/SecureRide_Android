@@ -29,7 +29,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/dimen_5dp">
+            android:paddingBottom="@dimen/dimen_5dp"
+            android:paddingTop="@dimen/dimen_5dp"
+            android:paddingLeft="@dimen/left_right_margin"
+            android:paddingRight="@dimen/left_right_margin">
 
 
             <EditText
@@ -39,6 +42,7 @@
                 android:background="@drawable/edittext_box"
                 android:editable="false"
                 android:ellipsize="end"
+                android:focusableInTouchMode="false"
                 android:hint="Pick Up Point"
                 android:paddingLeft="@dimen/dimen_10dp"
                 android:paddingRight="@dimen/dimen_10dp"
@@ -48,9 +52,11 @@
                 android:id="@+id/drop_point"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_42dp"
+                android:layout_marginTop="2dp"
                 android:background="@drawable/edittext_box"
                 android:editable="false"
                 android:ellipsize="end"
+                android:focusableInTouchMode="false"
                 android:hint="Drop Point"
                 android:paddingLeft="@dimen/dimen_10dp"
                 android:paddingRight="@dimen/dimen_10dp"
@@ -62,8 +68,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_60dp"
             android:layout_above="@+id/btn_confirm"
-            android:background="@android:color/white"
-            android:layout_below="@+id/manual_location_parent">
+            android:layout_below="@+id/manual_location_parent"
+            >
 
             <LinearLayout
                 android:id="@+id/carParent"
@@ -71,33 +77,35 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/left_right_margin"
-                android:paddingRight="@dimen/left_right_margin"
-                >
+                android:paddingRight="@dimen/left_right_margin">
 
                 <LinearLayout
                     android:id="@+id/llFirstCab"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    >
-                    <include layout="@layout/adapter_cabmodel"
-                        />
+                    android:layout_weight="1">
+
+                    <include layout="@layout/adapter_cabmodel" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/llSecondCab"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
                     android:layout_weight="1">
-                    <include layout="@layout/adapter_cabmodel"
-                        />
+
+                    <include layout="@layout/adapter_cabmodel" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/llThirdCabs"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-                    <include layout="@layout/adapter_cabmodel"
-                        />
+
+                    <include layout="@layout/adapter_cabmodel" />
                 </LinearLayout>
             </LinearLayout>
 

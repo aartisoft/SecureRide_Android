@@ -19,6 +19,8 @@ import com.securide.custmer.controllers.AddressController;
 import com.securide.custmer.listeners.IAddressListener;
 import com.securide.custmer.tasks.GetAddressTask;
 
+import org.json.JSONArray;
+
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -99,29 +101,32 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
     private void initSearchTask(String keyword){
         if(mGetAddressTask == null) {
             mGetAddressTask = new GetAddressTask(mContext, keyword, this);
-            mGetAddressTask.execute();
         }
+        mGetAddressTask.autocomplete(keyword);
     }
 
-    private void  setOrUpdateAdapter(List<Address> list){
-        if(mAddressListAdapter == null && list != null) {
-            mAddressListAdapter = new AddressListAdapter(mContext, 0, list);
-            mSearchListView.setAdapter(mAddressListAdapter);
-        } else {
-            if (mAddressListAdapter != null ){
-                mAddressListAdapter.updateListView(list);
+    private void  setOrUpdateAdapter(final List<String> list){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                if(mAddressListAdapter == null && list != null) {
+                    mAddressListAdapter = new AddressListAdapter(mContext, 0, list);
+                    mSearchListView.setAdapter(mAddressListAdapter);
+                } else {
+                    if (mAddressListAdapter != null ){
+                        mAddressListAdapter.updateListView(list);
+                    }
+                }
+
             }
-        }
+        });
+
     }
 
 
     @Override
-    public void onAddressDispatch(List<Address> list) {
-        if(mGetAddressTask != null && mGetAddressTask.getStatus() == AsyncTask.Status.RUNNING) {
-            mGetAddressTask.cancel(true);
-            mGetAddressTask = null;
-        }
-
+    public void onAddressDispatch(List<String> list,JSONArray placePredsJsonArray) {
         setOrUpdateAdapter(list);
     }
 

@@ -11,4 +11,11 @@
     <color name="light_orange">#FA9405</color>
     <color name="red">#cc4c3b</color>
     <color name="background_color">#ffffe9</color>
+
+    <color name="default_btn_background_color">#ffffe9</color>
+    <color name="default_btn_pressed_color">#ffffe9</color>
+
+    <color name="edittext_default_boarder">#ffffe9</color>
+    <color name="edittext_disable_boarder">#ffffe9</color>
+    <color name="edittext_focused_boarder_color">#303F9F</color>
 </resources>

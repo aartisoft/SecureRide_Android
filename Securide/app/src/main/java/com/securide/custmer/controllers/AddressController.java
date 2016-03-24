@@ -7,7 +7,7 @@ import android.location.Address;
  */
 public class AddressController {
     private static AddressController mInstance = new AddressController();
-    private Address mAddress = null;
+    private String mAddress = null;
 
     private AddressController(){
 
@@ -17,11 +17,11 @@ public class AddressController {
         return mInstance;
     }
 
-    public void setSelectedDestinationAddress(Address address){
+    public void setSelectedDestinationAddress(String address){
         mAddress = address;
     }
 
-    public Address getSelectedDestinationAddress(){
+    public String getSelectedDestinationAddress(){
         return mAddress;
     }
 }

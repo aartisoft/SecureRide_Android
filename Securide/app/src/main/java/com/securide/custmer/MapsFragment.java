@@ -26,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.securide.custmer.Util.Constants;
 import com.securide.custmer.listeners.ILocationListener;
 
 import java.util.List;
@@ -121,6 +122,8 @@ public class MapsFragment extends Fragment implements LocationListener {
         } else {
             requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+        Constants.lat = location.getLatitude();
+        Constants.lng = location.getLongitude();
         getAddress(location);
     }
 

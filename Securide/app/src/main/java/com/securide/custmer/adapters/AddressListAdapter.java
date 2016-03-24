@@ -17,15 +17,15 @@ import java.util.List;
 /**
  * Created by pradeep.kumar on 3/13/16.
  */
-public class AddressListAdapter extends ArrayAdapter<Address> {
+public class AddressListAdapter extends ArrayAdapter<String> {
 
-    private List<Address> mAddressList = new ArrayList<>(0);
+    private List<String> mAddressList = new ArrayList<>(0);
     private LayoutInflater mInflater = null;
-    private Address mSelectedAddress = null;
+    private String mSelectedAddress = null;
     private int mSelectedAddressIndex = 0;
     private Context mContext = null;
 
-    public AddressListAdapter(Context context, int resource, List<Address> ls) {
+    public AddressListAdapter(Context context, int resource, List<String> ls) {
         super(context, resource, ls);
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -38,7 +38,7 @@ public class AddressListAdapter extends ArrayAdapter<Address> {
         return mAddressList.size();
     }
 
-    public void updateListView(List<Address> addressList) {
+    public void updateListView(List<String> addressList) {
         mAddressList.clear();
         mAddressList.addAll(addressList);
         notifyDataSetChanged();
@@ -50,13 +50,14 @@ public class AddressListAdapter extends ArrayAdapter<Address> {
         TextView title = (TextView) convertView.findViewById(R.id.adapter_title);
         TextView details = (TextView) convertView.findViewById(R.id.adapter_details);
 
-        Address address = mAddressList.get(position);
-        if (address.getMaxAddressLineIndex() > 0) {
-            title.setText(address.getAddressLine(0));
-            details.setText(address.getAddressLine(1)+", "+address.getAddressLine(2));
-        }
+        String address = mAddressList.get(position);
+        title.setText(address);
+//        if (address.getMaxAddressLineIndex() > 0) {
+//            title.setText(address.getAddressLine(0));
+//            details.setText(address.getAddressLine(1)+", "+address.getAddressLine(2));
+//        }
 
-        if(mSelectedAddressIndex == position){
+        if (mSelectedAddressIndex == position) {
             convertView.setBackgroundResource(R.drawable.address_selected_box);
             title.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
             details.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
@@ -66,13 +67,13 @@ public class AddressListAdapter extends ArrayAdapter<Address> {
         return convertView;
     }
 
-    public void setSelectedAddress(int i){
+    public void setSelectedAddress(int i) {
         mSelectedAddressIndex = i;
         mSelectedAddress = mAddressList.get(i);
         notifyDataSetChanged();
     }
 
-    public Address getSelectedItem(){
+    public String getSelectedItem() {
         return mSelectedAddress;
     }
 }
