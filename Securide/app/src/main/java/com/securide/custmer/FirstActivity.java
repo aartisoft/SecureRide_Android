@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.securide.custmer.Util.Constants;
 import com.securide.custmer.connection.core.ConnectionConstants;
 import com.securide.custmer.connection.core.SecurideClient;
 import com.securide.custmer.connection.core.SocketConnector;
+import com.securide.custmer.preferences.SecuridePreferences;
 
 public class FirstActivity extends FragmentActivity implements View.OnClickListener {
 
@@ -28,6 +30,10 @@ public class FirstActivity extends FragmentActivity implements View.OnClickListe
 
         mBookRide.setOnClickListener(this);
         mRegister.setOnClickListener(this);
+        if ( SecuridePreferences.isRegistered()){
+            startActivity(new Intent(mContext, MapsActivity.class));
+            finish();
+        }
     }
 
     @Override
@@ -63,7 +69,9 @@ public class FirstActivity extends FragmentActivity implements View.OnClickListe
                 });
 
                 //t.start();
-                startActivity(new Intent(mContext, PrimaryRegistrationActivity.class));
+                Intent intent = new Intent(mContext, PrimaryRegistrationActivity.class);
+                intent.putExtra(Constants.Key_RegistrationFromMap,false);
+                startActivity(intent);
                 break;
         }
     }

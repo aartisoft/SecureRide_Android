@@ -7,4 +7,5 @@ public class Constants {
 
     public  static double lat;
     public  static double lng;
+    public  static String Key_RegistrationFromMap = "kRegistrationFromMap";
 }

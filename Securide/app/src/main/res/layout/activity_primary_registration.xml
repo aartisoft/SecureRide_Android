@@ -34,17 +34,81 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="Name"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:gravity="center_vertical"
+                        android:text="First Name*"
                         android:textColor="@color/black" />
 
                     <EditText
-                        android:id="@+id/name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/fname"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="@dimen/edittext_heght"
                         android:layout_gravity="center_horizontal"
+                        android:background="@drawable/edittext_box"
                         android:ems="10"
+                        android:paddingLeft="@dimen/edittext_left_right_padding"
+                        android:paddingRight="@dimen/edittext_left_right_padding"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="0.5"
+
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:gravity="center_vertical"
+                        android:text="Middle Name"
+                        android:textColor="@color/black" />
+
+                    <EditText
+                        android:id="@+id/middleName"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/edittext_box"
+                        android:ems="10"
+                        android:paddingLeft="@dimen/edittext_left_right_padding"
+                        android:paddingRight="@dimen/edittext_left_right_padding"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="0.5"
+
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:gravity="center_vertical"
+                        android:text="Last Name*"
+                        android:textColor="@color/black" />
+
+                    <EditText
+                        android:id="@+id/lname"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/edittext_box"
+                        android:ems="10"
+                        android:paddingLeft="@dimen/edittext_left_right_padding"
+                        android:paddingRight="@dimen/edittext_left_right_padding"
                         android:inputType="textPersonName" />
                 </LinearLayout>
 
@@ -58,17 +122,23 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="Address"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:gravity="center_vertical"
+                        android:text="Address*"
                         android:textColor="@color/black" />
 
                     <EditText
                         android:id="@+id/address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="@dimen/edittext_heght"
                         android:layout_gravity="center_horizontal"
+                        android:background="@drawable/edittext_box"
                         android:ems="10"
+                        android:paddingLeft="@dimen/edittext_left_right_padding"
+                        android:paddingRight="@dimen/edittext_left_right_padding"
                         android:inputType="textPostalAddress" />
                 </LinearLayout>
 
@@ -82,19 +152,25 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="Phone number"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:gravity="center_vertical"
+                        android:text="Phone number*"
                         android:textColor="@color/black" />
 
                     <EditText
                         android:id="@+id/phno"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="@dimen/edittext_heght"
                         android:layout_gravity="center_horizontal"
+                        android:background="@drawable/edittext_box"
                         android:ems="10"
-                        android:inputType="phone" />
+                        android:paddingLeft="@dimen/edittext_left_right_padding"
+                        android:paddingRight="@dimen/edittext_left_right_padding"
+                        android:inputType="phone"
+                        android:maxLength="8" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -107,18 +183,24 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="E-mail ID"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:gravity="center_vertical"
+                        android:text="E-mail Id*"
                         android:textColor="@color/black" />
 
                     <EditText
                         android:id="@+id/email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="@dimen/edittext_heght"
                         android:layout_gravity="center_horizontal"
+                        android:background="@drawable/edittext_box"
                         android:ems="10"
-                        android:inputType="textPersonName" />
+                        android:paddingLeft="@dimen/edittext_left_right_padding"
+                        android:paddingRight="@dimen/edittext_left_right_padding"
+                        android:inputType="textEmailAddress" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -131,17 +213,23 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="Password"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:gravity="center_vertical"
+                        android:text="Password*"
                         android:textColor="@color/black" />
 
                     <EditText
                         android:id="@+id/password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="@dimen/edittext_heght"
                         android:layout_gravity="center_horizontal"
+                        android:background="@drawable/edittext_box"
                         android:ems="10"
+                        android:paddingLeft="@dimen/edittext_left_right_padding"
+                        android:paddingRight="@dimen/edittext_left_right_padding"
                         android:inputType="textPassword" />
                 </LinearLayout>
 
@@ -154,29 +242,57 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="Confirm Password"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="Confirm Password*"
                         android:textColor="@color/black" />
 
                     <EditText
                         android:id="@+id/confirm_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="@dimen/edittext_heght"
                         android:layout_gravity="center_horizontal"
+                        android:background="@drawable/edittext_box"
                         android:ems="10"
+                        android:paddingLeft="@dimen/edittext_left_right_padding"
+                        android:paddingRight="@dimen/edittext_left_right_padding"
                         android:inputType="textPassword" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:enabled="false"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/edittext_heght"
+                        android:gravity="center_vertical"
+                        android:text="Save for next Transation"
+                        android:textColor="@color/black" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
         <Button
-            android:layout_width="wrap_content"
+            android:id="@+id/next_btn"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_marginTop="45dp"
-            android:text="Next"
-            android:id="@+id/next_btn"
+            android:text="OK"
             android:textColor="@color/black" />
     </LinearLayout>
 

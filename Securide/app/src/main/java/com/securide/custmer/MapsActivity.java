@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.securide.custmer.Util.Constants;
 import com.securide.custmer.controllers.AddressController;
 import com.securide.custmer.listeners.IMapListener;
 import com.securide.custmer.preferences.SecuridePreferences;
@@ -78,11 +79,14 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
                 }
                 else {
                     if (!SecuridePreferences.isRegistered()) {
-                        i = new Intent(MapsActivity.this, SecondryRegistrationActivity.class);
+                        Intent intent = new Intent(mContext, PrimaryRegistrationActivity.class);
+                        intent.putExtra(Constants.Key_RegistrationFromMap, true);
+                        startActivity(intent);
                     } else {
                         i = new Intent(MapsActivity.this, CostDetailsActivity.class);
+                        startActivity(i);
                     }
-                    startActivity(i);
+
                 }
             }
         });
