@@ -4,6 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="dimen_42dp">42dp</dimen>
     <dimen name="dimen_10dp">10dp</dimen>
+    <dimen name="dimen_20dp">20dp</dimen>
     <dimen name="dimen_50dp">50dp</dimen>
     <dimen name="dimen_60dp">60dp</dimen>
     <dimen name="dimen_80dp">80dp</dimen>
@@ -14,5 +15,7 @@
 
     <dimen name="edittext_heght">35dp</dimen>
     <dimen name="edittext_left_right_padding">5dp</dimen>
-
+    <dimen name="detail_view_text_size">12sp</dimen>
+    <dimen name="accept_button_width">100dp</dimen>
+    <dimen name="header_text_size">16sp</dimen>
 </resources>

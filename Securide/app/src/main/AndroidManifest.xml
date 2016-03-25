@@ -59,6 +59,11 @@
             android:name=".CostDetailsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".CabToCustomerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
+            </activity>
         <!-- Put your Google Maps V2 API Key here. -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
