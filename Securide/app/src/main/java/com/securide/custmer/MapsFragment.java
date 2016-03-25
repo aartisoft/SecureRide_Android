@@ -83,22 +83,27 @@ public class MapsFragment extends Fragment implements LocationListener {
             mGoogleMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
             mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
+            mGoogleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
 
+                }
+            });
             //============================================Dynamic permission for locations=======================================================
 
-            mHasAccessCoarseLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
-            mHasFineLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
-            if (mHasAccessCoarseLocation == PackageManager.PERMISSION_GRANTED) {
-                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
-            } else {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-            }
-
-            if (mHasFineLocation == PackageManager.PERMISSION_GRANTED) {
-                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
-            } else {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
+//            mHasAccessCoarseLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
+//            mHasFineLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
+//            if (mHasAccessCoarseLocation == PackageManager.PERMISSION_GRANTED) {
+//                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+//            } else {
+//                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+//            }
+//
+//            if (mHasFineLocation == PackageManager.PERMISSION_GRANTED) {
+//                mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+//            } else {
+//                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+//            }
             //==============================================================================================================
         }
         return root;
@@ -121,16 +126,16 @@ public class MapsFragment extends Fragment implements LocationListener {
 //        pickupMarker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())));
         updatePickUpLocation(latLng);
 
-        mHasAccessCoarseLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
-        mHasFineLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
-        if (mHasAccessCoarseLocation == PackageManager.PERMISSION_GRANTED && mHasFineLocation == PackageManager.PERMISSION_GRANTED) {
-            mLocationManager.removeUpdates(this);
-        } else {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }
-        Constants.lat = location.getLatitude();
-        Constants.lng = location.getLongitude();
-        getAddress(location);
+//        mHasAccessCoarseLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
+//        mHasFineLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
+//        if (mHasAccessCoarseLocation == PackageManager.PERMISSION_GRANTED && mHasFineLocation == PackageManager.PERMISSION_GRANTED) {
+//            mLocationManager.removeUpdates(this);
+//        } else {
+//            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+//        }
+//        Constants.lat = location.getLatitude();
+//        Constants.lng = location.getLongitude();
+//        getAddress(location);
     }
 
     @Override

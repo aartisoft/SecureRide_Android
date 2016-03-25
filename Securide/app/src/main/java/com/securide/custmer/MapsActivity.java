@@ -3,6 +3,10 @@ package com.securide.custmer;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -18,13 +22,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.securide.custmer.Util.Constants;
+import com.securide.custmer.Util.MyLocation;
+import com.securide.custmer.Util.MyLocation.LocationResult;
 import com.securide.custmer.controllers.AddressController;
 import com.securide.custmer.listeners.IMapListener;
 import com.securide.custmer.preferences.SecuridePreferences;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MapsActivity extends FragmentActivity implements IMapListener {
     public static final String TAG = "MapsActivity : ";
@@ -40,9 +48,16 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
     int selectedCabIndex = -1;
     MapsFragment mapFragment;
 
+    MyLocation myLocation;
+    LocationResult result;
+    String mPickupAddress;
+    LocationManager locMan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myLocation = new MyLocation();
+        locMan = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         setContentView(R.layout.activity_maps);
         mInflater = LayoutInflater.from(mContext);
         llFirstCab = (LinearLayout) findViewById(R.id.llFirstCab);
@@ -131,6 +146,7 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
             }
         });
 
+        getCurrentLocation();
     }
 
     @Override
@@ -180,5 +196,70 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
     @Override
     public void onCurrentAddress(String location) {
         mPickupPoint.setText(location);
+    }
+
+    private void getAddress(final Location location) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Geocoder geocoder;
+                List<Address> address;
+                geocoder = new Geocoder(MapsActivity.this, Locale.getDefault());
+                try {
+                    address = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    if (address.size() > 0) {
+                        String addr = address.get(0).getAddressLine(0);
+                        String city = address.get(0).getAddressLine(1);
+                        String country = address.get(0).getAddressLine(2);
+                        mPickupAddress = addr.concat(city).concat(country);
+                    }
+                } catch (Exception e) {
+
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AddressController.getInstance().setSelectedSourceAddress(mPickupAddress);
+                        onCurrentAddress(mPickupAddress);
+                    }
+                });
+            }
+        });
+        thread.start();
+    }
+
+    void getCurrentLocation() {
+        MyLocation.LocationResult locationResult = new LocationResult() {
+            @Override
+            public void gotLocation(Location location) {
+
+                if (location != null) {
+
+                    Constants.lat = location.getLatitude();
+                    Constants.lng = location.getLongitude();
+                    getAddress(location);
+                    LatLng latLng = new LatLng(Constants.lat, Constants.lng);
+                    mapFragment.updatePickUpLocation(latLng);
+                    myLocation.cancelTimer();
+                    AddressController.getInstance().setSourceLocaton(latLng);
+                } else {
+                    Criteria criteria = new Criteria();
+                    String curLoc = locMan.getBestProvider(criteria, true);
+                    location = locMan.getLastKnownLocation(curLoc);
+                    if (location != null) {
+                        Constants.lat = location.getLatitude();
+                        Constants.lng = location.getLongitude();
+                        LatLng latLng = new LatLng(Constants.lat, Constants.lng);
+                        mapFragment.updatePickUpLocation(latLng);
+                        AddressController.getInstance().setSourceLocaton(latLng);
+                        getAddress(location);
+                    }
+
+                }
+            }
+        };
+        if (myLocation.getLocation(getApplicationContext(),
+                locationResult)) {
+        }
     }
 }
