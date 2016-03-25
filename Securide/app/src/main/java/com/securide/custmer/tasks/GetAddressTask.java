@@ -31,7 +31,7 @@ public class GetAddressTask  {
     private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
     private static final String OUT_JSON = "/json";
-    private static final String API_KEY = "AIzaSyDAIb7josxX55yT-aam9XpCnbPgKWjwIjs";
+
     JSONArray placePredsJsonArray;
     public GetAddressTask(Context ctx, String locationHint, IAddressListener listener) {
         mContext = ctx;
@@ -39,14 +39,18 @@ public class GetAddressTask  {
 
     }
 
-    public void autocomplete(String input) {
+    public void autocomplete(String input, Boolean restictToRadius) {
         ArrayList<String> resultList = null;
 
         try {
             String location = Double.toString(Constants.lat)+","+Double.toString(Constants.lng);
             StringBuilder sb = new StringBuilder(PLACES_API_BASE
                     + TYPE_AUTOCOMPLETE + OUT_JSON);
-            sb.append("?key=" + API_KEY+"&location="+location+"&radius=50000");
+            sb.append("?key=" + Constants.API_KEY);
+            if (restictToRadius){
+                sb.append( "&location="+location+"&radius=50000");
+            }
+
             // sb.append("&components=country:in");
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
 

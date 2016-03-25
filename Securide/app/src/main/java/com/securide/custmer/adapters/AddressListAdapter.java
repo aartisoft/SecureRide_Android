@@ -22,7 +22,7 @@ public class AddressListAdapter extends ArrayAdapter<String> {
     private List<String> mAddressList = new ArrayList<>(0);
     private LayoutInflater mInflater = null;
     private String mSelectedAddress = null;
-    private int mSelectedAddressIndex = 0;
+    public int mSelectedAddressIndex = 0;
     private Context mContext = null;
 
     public AddressListAdapter(Context context, int resource, List<String> ls) {

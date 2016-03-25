@@ -25,8 +25,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.securide.custmer.Util.Constants;
+import com.securide.custmer.controllers.AddressController;
 import com.securide.custmer.listeners.ILocationListener;
 
 import java.util.List;
@@ -53,6 +56,8 @@ public class MapsFragment extends Fragment implements LocationListener {
     int mHasAccessCoarseLocation = -1;
     int mHasFineLocation = -1;
 
+    Marker pickupMarker, dropMarker;
+    private LatLngBounds.Builder bld;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -83,16 +88,16 @@ public class MapsFragment extends Fragment implements LocationListener {
 
             mHasAccessCoarseLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
             mHasFineLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
-            if(mHasAccessCoarseLocation == PackageManager.PERMISSION_GRANTED) {
+            if (mHasAccessCoarseLocation == PackageManager.PERMISSION_GRANTED) {
                 mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
             } else {
-                requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
             }
 
-            if(mHasFineLocation == PackageManager.PERMISSION_GRANTED) {
+            if (mHasFineLocation == PackageManager.PERMISSION_GRANTED) {
                 mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
             } else {
-                requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
             //==============================================================================================================
         }
@@ -103,7 +108,7 @@ public class MapsFragment extends Fragment implements LocationListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        mActivity = (MapsActivity)context;
+        mActivity = (MapsActivity) context;
     }
 
     @Override
@@ -113,14 +118,15 @@ public class MapsFragment extends Fragment implements LocationListener {
         mGoogleMap.animateCamera(cameraUpdate);
         mGoogleMap.getUiSettings().setZoomGesturesEnabled(true);
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
-        mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())));
+//        pickupMarker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())));
+        updatePickUpLocation(latLng);
 
         mHasAccessCoarseLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
         mHasFineLocation = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
-        if(mHasAccessCoarseLocation == PackageManager.PERMISSION_GRANTED && mHasFineLocation == PackageManager.PERMISSION_GRANTED){
+        if (mHasAccessCoarseLocation == PackageManager.PERMISSION_GRANTED && mHasFineLocation == PackageManager.PERMISSION_GRANTED) {
             mLocationManager.removeUpdates(this);
         } else {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
         Constants.lat = location.getLatitude();
         Constants.lng = location.getLongitude();
@@ -152,7 +158,7 @@ public class MapsFragment extends Fragment implements LocationListener {
                 List<Address> address;
                 geocoder = new Geocoder(mActivity, Locale.getDefault());
                 try {
-                    address= geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    address = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                     if (address.size() > 0) {
                         String addr = address.get(0).getAddressLine(0);
                         String city = address.get(0).getAddressLine(1);
@@ -165,11 +171,44 @@ public class MapsFragment extends Fragment implements LocationListener {
                 mActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        AddressController.getInstance().setSelectedSourceAddress(mPickupAddress);
                         mActivity.onCurrentAddress(mPickupAddress);
                     }
                 });
             }
         });
         thread.start();
+    }
+
+    void updatePickUpLocation(LatLng location) {
+        if (pickupMarker == null) {
+            pickupMarker = mGoogleMap.addMarker(new MarkerOptions().position(location));
+        } else {
+            pickupMarker.setPosition(location);
+        }
+        updateZoomLevel();
+    }
+
+    void updateDropLocation(LatLng location) {
+        if (dropMarker == null) {
+            dropMarker = mGoogleMap.addMarker(new MarkerOptions().position(location));
+        } else {
+            dropMarker.setPosition(location);
+        }
+        updateZoomLevel();
+    }
+
+    void updateZoomLevel() {
+        bld = null;
+        bld = new LatLngBounds.Builder();
+
+        if (pickupMarker != null) {
+            bld.include(pickupMarker.getPosition());
+        }
+        if (dropMarker != null) {
+            bld.include(dropMarker.getPosition());
+        }
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bld.build(),
+                200));
     }
 }

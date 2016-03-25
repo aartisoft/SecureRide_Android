@@ -38,7 +38,7 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
     LinearLayout llFirstCab, llSecondCab, llThirdCabs;
 
     int selectedCabIndex = -1;
-
+    MapsFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,8 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.temp_fragment, MapsFragment.newInstance(), "maps");
+        mapFragment = MapsFragment.newInstance();
+        fragmentTransaction.add(R.id.temp_fragment, mapFragment, "maps");
         fragmentTransaction.commitAllowingStateLoss();
 
 //        prepareAndShowCabs();
@@ -72,12 +73,11 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
                 if (TextUtils.isEmpty(mPickupPoint.getText().toString())) {
                     Toast.makeText(mContext, "Please select Pick up point", Toast.LENGTH_SHORT).show();
 
-                }else if (TextUtils.isEmpty(mDropPoint.getText().toString())) {
+                } else if (TextUtils.isEmpty(mDropPoint.getText().toString())) {
                     Toast.makeText(mContext, "Please select Drop point", Toast.LENGTH_SHORT).show();
-                }else if(selectedCabIndex == -1){
+                } else if (selectedCabIndex == -1) {
                     Toast.makeText(mContext, "Please select Cab type", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     if (!SecuridePreferences.isRegistered()) {
                         Intent intent = new Intent(mContext, PrimaryRegistrationActivity.class);
                         intent.putExtra(Constants.Key_RegistrationFromMap, true);
@@ -94,7 +94,17 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
         mDropPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mContext, AddressSearchActivity.class));
+                Intent intent = new Intent(mContext, AddressSearchActivity.class);
+                intent.putExtra(Constants.Key_IsPickup, false);
+                startActivity(intent);
+            }
+        });
+        mPickupPoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, AddressSearchActivity.class);
+                intent.putExtra(Constants.Key_IsPickup, true);
+                startActivity(intent);
             }
         });
 
@@ -129,6 +139,13 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
 
         String address = AddressController.getInstance().getSelectedDestinationAddress();
         mDropPoint.setText(address);
+        mPickupPoint.setText(AddressController.getInstance().getSelectedSourceAddress());
+        if (AddressController.getInstance().getSourceLocaton() != null) {
+            mapFragment.updatePickUpLocation(AddressController.getInstance().getSourceLocaton());
+        }
+        if (AddressController.getInstance().getDestinationLocaton() != null) {
+            mapFragment.updateDropLocation(AddressController.getInstance().getDestinationLocaton());
+        }
     }
 
     private void prepareAndShowCabs(LinearLayout view, CabModel cabModel) {
