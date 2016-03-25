@@ -13,6 +13,7 @@
 
     <dimen name="left_right_margin">15dp</dimen>
 
+    <dimen name="btn_heght">35dp</dimen>
     <dimen name="edittext_heght">35dp</dimen>
     <dimen name="edittext_left_right_padding">5dp</dimen>
     <dimen name="detail_view_text_size">12sp</dimen>

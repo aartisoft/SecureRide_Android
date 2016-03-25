@@ -247,7 +247,7 @@
             <Button
                 android:id="@+id/Accept"
                 android:layout_width="@dimen/accept_button_width"
-                android:layout_height="45dp"
+                android:layout_height="@dimen/btn_heght"
                 android:background="@drawable/accept_bg_rounded"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
@@ -256,7 +256,7 @@
                 android:id="@+id/Reject"
                 android:layout_marginLeft="50dp"
                 android:layout_width="@dimen/accept_button_width"
-                android:layout_height="45dp"
+                android:layout_height="@dimen/btn_heght"
                 android:textAllCaps="false"
                 android:background="@drawable/reject_bg_rounded"
                 android:textColor="@color/white"

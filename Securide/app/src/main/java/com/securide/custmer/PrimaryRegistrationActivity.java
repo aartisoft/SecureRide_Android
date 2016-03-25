@@ -48,26 +48,6 @@ public class PrimaryRegistrationActivity extends AppCompatActivity implements Vi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.next_btn:
-                if(!TextUtils.isEmpty(fname.getText())
-                        && !TextUtils.isEmpty(lname.getText())
-                        && !TextUtils.isEmpty(mAddress.getText())
-                        && !TextUtils.isEmpty(mPhoneNo.getText())
-                        && !TextUtils.isEmpty(mEmail.getText())
-                        && !TextUtils.isEmpty(mPassword.getText())
-                        && !TextUtils.isEmpty(mConfirmPassword.getText())) {
-                    SecuridePreferences.setRegistrationStatus(true);
-                    startActivity(new Intent(mContext, MapsActivity.class));
-                    finish();
-                    Toast.makeText(mContext, "Registration success", Toast.LENGTH_LONG).show();
-                } else {
-                    if(TextUtils.isEmpty(fname.getText())) fname.setError(" Field is empty");
-                    if(TextUtils.isEmpty(lname.getText())) lname.setError(" Field is empty");
-                    if(TextUtils.isEmpty(mAddress.getText())) mAddress.setError(" Field is empty");
-                    if(TextUtils.isEmpty(mPhoneNo.getText())) mPhoneNo.setError(" Field is empty");
-                    if(TextUtils.isEmpty(mEmail.getText())) mEmail.setError(" Field is empty");
-                    if(TextUtils.isEmpty(mPassword.getText())) mPassword.setError(" Field is empty");
-                    if(TextUtils.isEmpty(mConfirmPassword.getText())) mConfirmPassword.setError(" Field is empty");
-                }
                 Boolean isFormError = false;
                 if (!TextUtils.isEmpty(fname.getText())){
                     fname.setError(null);
