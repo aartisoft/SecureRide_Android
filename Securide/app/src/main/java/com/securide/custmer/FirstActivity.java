@@ -13,6 +13,7 @@ import com.securide.custmer.Util.Constants;
 import com.securide.custmer.connection.core.ConnectionConstants;
 import com.securide.custmer.connection.core.SecurideClient;
 import com.securide.custmer.connection.core.SocketConnector;
+import com.securide.custmer.controllers.AddressController;
 import com.securide.custmer.preferences.SecuridePreferences;
 
 public class FirstActivity extends FragmentActivity implements View.OnClickListener {
@@ -98,5 +99,14 @@ public class FirstActivity extends FragmentActivity implements View.OnClickListe
 
         return result;
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AddressController.getInstance().setDestinationLocaton(null);
+        AddressController.getInstance().setSourceLocaton(null);
+        AddressController.getInstance().setSelectedSourceAddress(null);
+        AddressController.getInstance().setSelectedDestinationAddress(null);
     }
 }
