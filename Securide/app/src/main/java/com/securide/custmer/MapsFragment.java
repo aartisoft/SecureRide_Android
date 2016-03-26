@@ -1,6 +1,7 @@
 package com.securide.custmer;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -45,7 +46,7 @@ import java.util.Locale;
 public class MapsFragment extends Fragment implements LocationListener {
     private static final String TAG = "MapsFragment : ";
     private Context mContext = null;
-    private MapsActivity mActivity = null;
+    private Activity mActivity = null;
     // Google Map
     private GoogleMap mGoogleMap = null;
     private String mPickupAddress = null;
@@ -113,7 +114,7 @@ public class MapsFragment extends Fragment implements LocationListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        mActivity = (MapsActivity) context;
+        mActivity = (Activity) context;
     }
 
     @Override
@@ -155,7 +156,7 @@ public class MapsFragment extends Fragment implements LocationListener {
     }
 
 
-    private void getAddress(final Location location) {
+/*    private void getAddress(final Location location) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -183,7 +184,7 @@ public class MapsFragment extends Fragment implements LocationListener {
             }
         });
         thread.start();
-    }
+    }*/
 
     void updatePickUpLocation(LatLng location) {
         if (pickupMarker == null) {

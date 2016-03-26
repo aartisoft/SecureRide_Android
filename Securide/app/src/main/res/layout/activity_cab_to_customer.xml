@@ -15,7 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="7dp"
-            android:src="@drawable/arrow" />
+            android:src="@drawable/arrow"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/headerText"
@@ -48,10 +49,7 @@
         <RelativeLayout
             android:id="@+id/temp_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/dummy_map_bg">
-
-        </RelativeLayout>
+            android:layout_height="match_parent"></RelativeLayout>
 
 
     </LinearLayout>

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +18,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.securide.custmer.controllers.AddressController;
+
 /**
  * Created by pradeep.kumar on 3/16/16.
  */
 public class CabToCustomerActivity extends FragmentActivity implements View.OnClickListener{
     public static final String TAG = "CabToCustomerActivity : ";
     private ImageView back,phoneIcon;
+    static MapsFragment mapFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,23 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
         PaymentModeDialog paymentModeDialog = new PaymentModeDialog();
         paymentModeDialog.setCancelable(false);
         fm.beginTransaction().add(paymentModeDialog, "payment_mode_chooser").commitAllowingStateLoss();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        mapFragment = MapsFragment.newInstance();
+        fragmentTransaction.add(R.id.temp_fragment, mapFragment, "maps");
+        fragmentTransaction.commitAllowingStateLoss();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+       // Log.d("Lat",""+AddressController.getInstance().getSourceLocaton());
+      //  Log.d("Lon",""+AddressController.getInstance().getDestinationLocaton());
+      //  mapFragment.updatePickUpLocation(AddressController.getInstance().getSourceLocaton());
+      //  mapFragment.updatePickUpLocation(AddressController.getInstance().getDestinationLocaton());
+
     }
 
     @Override
@@ -74,6 +96,11 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
                     break;
                 case R.id.process:
                    getDialog().cancel();
+                    Log.d("Lat",""+AddressController.getInstance().getSourceLocaton());
+                    Log.d("Lon",""+AddressController.getInstance().getDestinationLocaton());
+                     mapFragment.updatePickUpLocation(AddressController.getInstance().getSourceLocaton());
+                     mapFragment.updateDropLocation(AddressController.getInstance().getDestinationLocaton());
+
                     break;
             }
         }
