@@ -76,7 +76,11 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             int divierId = getDialog().getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
             View divider = getDialog().findViewById(divierId);
-            divider.setBackgroundColor(Color.TRANSPARENT);
+            try {
+                divider.setBackgroundColor(Color.TRANSPARENT);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             process = (Button)view.findViewById(R.id.process);
             process.setOnClickListener(this);
             payme_Cab_Layout = (LinearLayout)view.findViewById(R.id.payme_Cab_Layout);

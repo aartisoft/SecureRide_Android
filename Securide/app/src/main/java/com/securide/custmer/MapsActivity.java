@@ -2,12 +2,14 @@ package com.securide.custmer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -145,10 +147,35 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
 
             }
         });
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
 
-        getCurrentLocation();
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},101);
+
+        }else {
+            getCurrentLocation();
+        }
+
+
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 101: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getCurrentLocation();
 
+                } else {
+                 finish();
+                 Toast.makeText(MapsActivity.this,"SecuRide can't work without this Permission",Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
