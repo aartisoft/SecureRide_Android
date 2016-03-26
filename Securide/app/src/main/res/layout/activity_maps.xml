@@ -65,7 +65,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_60dp"
+            android:layout_height="@dimen/dimen_80dp"
             android:layout_above="@+id/btn_confirm"
             android:layout_below="@+id/manual_location_parent"
             >
