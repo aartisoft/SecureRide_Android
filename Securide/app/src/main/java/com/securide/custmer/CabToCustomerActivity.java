@@ -53,10 +53,6 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
-       // Log.d("Lat",""+AddressController.getInstance().getSourceLocaton());
-      //  Log.d("Lon",""+AddressController.getInstance().getDestinationLocaton());
-      //  mapFragment.updatePickUpLocation(AddressController.getInstance().getSourceLocaton());
-      //  mapFragment.updatePickUpLocation(AddressController.getInstance().getDestinationLocaton());
 
     }
 
@@ -78,7 +74,9 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.payment_mode_dialog_screen, container);
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
+            int divierId = getDialog().getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
+            View divider = getDialog().findViewById(divierId);
+            divider.setBackgroundColor(Color.TRANSPARENT);
             process = (Button)view.findViewById(R.id.process);
             process.setOnClickListener(this);
             payme_Cab_Layout = (LinearLayout)view.findViewById(R.id.payme_Cab_Layout);
@@ -96,10 +94,10 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
                     break;
                 case R.id.process:
                    getDialog().cancel();
-                    Log.d("Lat",""+AddressController.getInstance().getSourceLocaton());
-                    Log.d("Lon",""+AddressController.getInstance().getDestinationLocaton());
-                     mapFragment.updatePickUpLocation(AddressController.getInstance().getSourceLocaton());
-                     mapFragment.updateDropLocation(AddressController.getInstance().getDestinationLocaton());
+                   Log.d("Lat",""+AddressController.getInstance().getSourceLocaton());
+                    Log.d("Lon", "" + AddressController.getInstance().getDestinationLocaton());
+                   mapFragment.updatePickUpLocation(AddressController.getInstance().getSourceLocaton());
+                   mapFragment.updateDropLocation(AddressController.getInstance().getDestinationLocaton());
 
                     break;
             }

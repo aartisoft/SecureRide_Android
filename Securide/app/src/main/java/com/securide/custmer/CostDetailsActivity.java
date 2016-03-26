@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.securide.custmer.controllers.AddressController;
 import com.securide.custmer.preferences.SecuridePreferences;
 
 public class CostDetailsActivity extends AppCompatActivity implements View.OnClickListener{
     private Button btnAccept,btnReject;
+    private TextView tvPick_point,tvDrop_point;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +25,10 @@ public class CostDetailsActivity extends AppCompatActivity implements View.OnCli
         btnAccept.setOnClickListener(this);
         btnReject = (Button)findViewById(R.id.Reject);
         btnReject.setOnClickListener(this);
+        tvPick_point = (TextView)findViewById(R.id.pick_point);
+        tvPick_point.setText(AddressController.getInstance().getSelectedSourceAddress());
+        tvDrop_point = (TextView)findViewById(R.id.drop_point);
+        tvDrop_point.setText(AddressController.getInstance().getSelectedDestinationAddress());
     }
 
     @Override
@@ -32,6 +39,7 @@ public class CostDetailsActivity extends AppCompatActivity implements View.OnCli
                 startActivity(intent);
                 break;
             case R.id.Reject:
+                finish();
                 break;
         }
     }
