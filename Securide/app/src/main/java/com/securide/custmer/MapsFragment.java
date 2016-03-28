@@ -25,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -82,7 +83,7 @@ public class MapsFragment extends Fragment implements LocationListener {
             dialog.show();
         } else {
             mGoogleMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
-            mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+//            mLocationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
 
             mGoogleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                 @Override
@@ -197,7 +198,8 @@ public class MapsFragment extends Fragment implements LocationListener {
 
     void updateDropLocation(LatLng location) {
         if (dropMarker == null) {
-            dropMarker = mGoogleMap.addMarker(new MarkerOptions().position(location));
+            dropMarker = mGoogleMap.addMarker(new MarkerOptions().position(location)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         } else {
             dropMarker.setPosition(location);
         }

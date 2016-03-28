@@ -198,25 +198,25 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
 
     private List<CabModel> prepareCabsList() {
         List<CabModel> list = new ArrayList<>(0);
-        list.add(new CabModel("Limousine", R.drawable.limousine));
-        list.add(new CabModel("Regular", R.drawable.regular));
-        list.add(new CabModel("Special", R.drawable.special));
+        list.add(new CabModel("Limousine", R.drawable.car_limousin));
+        list.add(new CabModel("Regular", R.drawable.car_regular));
+        list.add(new CabModel("Special", R.drawable.car_spl));
         return list;
     }
 
     void updateCabSelection() {
-        View vwFirstCab = (View) llFirstCab.findViewById(R.id.selectionView);
-        View vwSecondCab = (View) llSecondCab.findViewById(R.id.selectionView);
-        View vwThirdCab = (View) llThirdCabs.findViewById(R.id.selectionView);
-        vwFirstCab.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.white));
-        vwSecondCab.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.white));
-        vwThirdCab.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.white));
+        ImageView vwFirstCab = (ImageView) llFirstCab.findViewById(R.id.car_image);
+        ImageView vwSecondCab = (ImageView) llSecondCab.findViewById(R.id.car_image);
+        ImageView vwThirdCab = (ImageView) llThirdCabs.findViewById(R.id.car_image);
+        vwFirstCab.setImageResource(R.drawable.car_limousin);
+        vwSecondCab.setImageResource(R.drawable.car_regular);
+        vwThirdCab.setImageResource(R.drawable.car_spl);
         if (selectedCabIndex == 0) {
-            vwFirstCab.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.lighter_grey));
+            vwFirstCab.setImageResource(R.drawable.car_limousin_selected);
         } else if (selectedCabIndex == 1) {
-            vwSecondCab.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.lighter_grey));
+            vwSecondCab.setImageResource(R.drawable.car_regular_selected);
         } else if (selectedCabIndex == 2) {
-            vwThirdCab.setBackgroundColor(ContextCompat.getColor(MapsActivity.this, R.color.lighter_grey));
+            vwThirdCab.setImageResource(R.drawable.car_spl_selected);
         }
     }
 
