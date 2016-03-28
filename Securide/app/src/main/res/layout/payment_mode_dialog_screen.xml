@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/payment_mode_bg_rounded"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:text="Payment Mode"
         android:textColor="@color/black"
@@ -16,6 +17,8 @@
         android:textStyle="bold" />
 
     <LinearLayout
+        android:id="@+id/paymentLayout"
+        android:layout_below="@+id/Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_10dp"
@@ -78,10 +81,13 @@
         android:id="@+id/process"
         android:layout_width="@dimen/accept_button_width"
         android:layout_height="35dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/paymentLayout"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:background="@drawable/accept_bg_rounded"
+
         android:text="Processed"
         android:textAllCaps="false"
         android:textColor="@color/white" />
-</LinearLayout>
+
+</RelativeLayout>
