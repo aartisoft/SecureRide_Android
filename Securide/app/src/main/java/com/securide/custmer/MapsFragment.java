@@ -193,7 +193,7 @@ public class MapsFragment extends Fragment implements LocationListener {
         } else {
             pickupMarker.setPosition(location);
         }
-        updateZoomLevel();
+        updateZoomLevel(location);
     }
 
     void updateDropLocation(LatLng location) {
@@ -203,20 +203,46 @@ public class MapsFragment extends Fragment implements LocationListener {
         } else {
             dropMarker.setPosition(location);
         }
-        updateZoomLevel();
+        updateZoomLevel(location);
     }
 
-    void updateZoomLevel() {
-        bld = null;
-        bld = new LatLngBounds.Builder();
+    void updateZoomLevel(final LatLng location) {
+        if (AddressController.getInstance().getDestinationLocaton() != null && AddressController.getInstance().getSourceLocaton() != null) {
+            bld = null;
+            bld = new LatLngBounds.Builder();
 
-        if (pickupMarker != null) {
-            bld.include(pickupMarker.getPosition());
+            if (pickupMarker != null) {
+                bld.include(pickupMarker.getPosition());
+            }
+            if (dropMarker != null) {
+                bld.include(dropMarker.getPosition());
+            }
+            try {
+                mGoogleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                    @Override
+                    public void onMapLoaded() {
+                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bld.build(),
+                                200));
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+
+            try {
+                mGoogleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                    @Override
+                    public void onMapLoaded() {
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, 15);
+                        mGoogleMap.animateCamera(cameraUpdate);
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        if (dropMarker != null) {
-            bld.include(dropMarker.getPosition());
-        }
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bld.build(),
-                200));
     }
 }
