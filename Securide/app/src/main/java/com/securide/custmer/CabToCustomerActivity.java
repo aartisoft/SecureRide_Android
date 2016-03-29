@@ -10,9 +10,11 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -74,6 +76,10 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.payment_mode_dialog_screen, container);
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            getDialog().getWindow().setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+            WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
+            params.y = 100;
+            getDialog().getWindow().setAttributes(params);
             int divierId = getDialog().getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
             View divider = getDialog().findViewById(divierId);
             try {
