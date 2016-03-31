@@ -21,7 +21,6 @@ import com.securide.custmer.Util.HTTPHandler;
 import com.securide.custmer.adapters.AddressListAdapter;
 import com.securide.custmer.controllers.AddressController;
 import com.securide.custmer.listeners.IAddressListener;
-import com.securide.custmer.model.AddressObject;
 import com.securide.custmer.tasks.GetAddressTask;
 
 import org.apache.http.NameValuePair;
@@ -47,7 +46,6 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
     Boolean isPickUp = false;
     String mLattitude, mLongitude;
     JSONArray placePredsJsonArray;
-    AddressObject addressObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +104,11 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
             case R.id.ok_btn:
                 if (mAddressListAdapter != null) {
                     String place_id = null;
-
+                    if (isPickUp){
+                        AddressController.getInstance().setSelectedSourceAddress(mAddressListAdapter.getSelectedItem());
+                    }else{
+                        AddressController.getInstance().setSelectedDestinationAddress(mAddressListAdapter.getSelectedItem());
+                    }
                     try {
                         place_id = placePredsJsonArray.getJSONObject(mAddressListAdapter.mSelectedAddressIndex).getString("place_id");
                         new GeocodeAsnc().execute(place_id);
@@ -185,43 +187,6 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
                         .getJSONObject("location").getString("lat");
                 mLongitude = routeObject.getJSONObject("geometry")
                         .getJSONObject("location").getString("lng");
-                addressObject = new AddressObject();
-                addressObject.setLattitude(mLattitude);
-                addressObject.setLongitude(mLongitude);
-                addressObject.setFormatedAddress(routeObject.getString("formatted_address"));
-
-                JSONArray address_components = routeObject.getJSONArray("address_components");
-                for (int i = 0;i<address_components.length();i++){
-                    JSONObject component = (JSONObject) address_components.get(i);
-                    JSONArray types = component.getJSONArray("types");
-                    String long_name = component.getString("long_name");
-                    for (int j = 0 ; j<types.length();j++){
-                        String type = (String) types.get(j);
-
-                        if (type.equalsIgnoreCase("route")){
-                            addressObject.setStreatName(long_name);
-                            break;
-                        }
-                        if (type.equalsIgnoreCase("sublocality_level_2")){
-                            addressObject.setStreatName(addressObject.getStreatName()+","+long_name);
-                            break;
-                        }
-                        if (type.equalsIgnoreCase("sublocality_level_1")){
-                            addressObject.setLandmark(long_name);
-                            break;
-                        }
-                        if (type.equalsIgnoreCase("locality")){
-                            addressObject.setCity(long_name);
-                            break;
-                        }
-                        if (type.equalsIgnoreCase("postal_code")){
-                            addressObject.setPincode(long_name);
-                            break;
-                        }
-                    }
-
-                }
-
 
                 System.out.println("Lattitude : " + mLattitude);
                 System.out.println("Longitude : " + mLongitude);
@@ -241,10 +206,8 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
 
             if (isPickUp){
                 AddressController.getInstance().setSourceLocaton(location);
-                AddressController.getInstance().setSelectedSourceAddress(addressObject);
             }else{
                 AddressController.getInstance().setDestinationLocaton(location);
-                AddressController.getInstance().setSelectedDestinationAddress(addressObject);
             }
             finish();
         }
