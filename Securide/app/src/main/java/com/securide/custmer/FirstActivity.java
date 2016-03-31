@@ -40,10 +40,10 @@ public class FirstActivity extends FragmentActivity implements View.OnClickListe
 
         mBookRide.setOnClickListener(this);
         mRegister.setOnClickListener(this);
-//        if ( SecuridePreferences.isRegistered()){
-//            startActivity(new Intent(mContext, MapsActivity.class));
-//            finish();
-//        }
+        if ( SecuridePreferences.isRegistered()){
+            startActivity(new Intent(mContext, MapsActivity.class));
+            finish();
+        }
         String text = getString();
         Log.i("Hello test",text);
         JNIConnectionManager.getConnectionManager().setupSocket();

@@ -1,107 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/background_color"
+    android:orientation="vertical"
     android:padding="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_weight="0.7"
+        android:layout_height="match_parent"
+        android:background="@color/background_color"
         android:orientation="vertical">
+
 
         <LinearLayout
+            android:id="@+id/searchLayout"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_weight="0.7"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/search_text"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/search_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.7"
+                    android:background="@drawable/search_box"
+                    android:hint="Enter destination"
+                    android:inputType="text"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/search_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.7"
-                android:background="@drawable/search_box"
-                android:hint="Enter destination"
-                android:paddingLeft="5dp"
-                android:inputType="text"
-                android:singleLine="true" />
-
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp" />
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/search_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp" />
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/add_home"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/search_box"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:text="Add Home"
-            android:textSize="18sp" />
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/search_box">
+            android:layout_height="110dp"
+            android:layout_below="@+id/searchLayout"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
+
             <TextView
-                android:id="@+id/homeAddress"
+                android:id="@+id/add_home"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
+                android:background="@drawable/search_box"
                 android:gravity="center_vertical"
                 android:paddingLeft="15dp"
-                android:layout_marginTop="@dimen/dimen_5dp"
-                android:text="Newwork Sanfrascisco"
+                android:text="Add Home"
                 android:textSize="18sp" />
+
+            <RelativeLayout
+                android:id="@+id/homeAddressLayout"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@drawable/search_box"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/homeAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_5dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:text="Newwork Sanfrascisco"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/homeAddressChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/homeAddress"
+                    android:layout_marginRight="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Change"
+                    android:textColor="#0000ff"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
             <TextView
-                android:id="@+id/homeAddressChange"
-                android:layout_below="@+id/homeAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/add_work"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="55dp"
+                android:background="@drawable/search_box"
                 android:gravity="center_vertical"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="30dp"
-                android:text="Change"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:paddingLeft="15dp"
+                android:text="Add Work"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:id="@+id/workAddressLayout"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="55dp"
+                android:background="@drawable/search_box"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/workAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_5dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="15dp"
+                    android:text="Newwork Sanfrascisco"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/workAddressChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/workAddress"
+                    android:layout_marginRight="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Change"
+                    android:textColor="#0000ff"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/ok_btn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="3dp"
+                android:background="@color/dark_green"
+                android:gravity="center"
+                android:text="OK"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:visibility="gone" />
         </RelativeLayout>
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/add_work"
-            android:layout_below="@+id/add_home"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/search_box"
-            android:gravity="center_vertical"
-            android:paddingLeft="15dp"
-            android:text="Add Work"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/ok_btn"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="3dp"
-            android:background="@color/dark_green"
-            android:gravity="center"
-            android:text="OK"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:visibility="gone"/>
-    </RelativeLayout>
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/mProgressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>
