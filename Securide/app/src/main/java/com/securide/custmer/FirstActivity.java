@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.securide.custmer.Util.Constants;
 import com.securide.custmer.connection.core.ConnectionConstants;
+import com.securide.custmer.connection.core.JNIConnectionManager;
 import com.securide.custmer.connection.core.SecurideClient;
 import com.securide.custmer.connection.core.SocketConnector;
 import com.securide.custmer.controllers.AddressController;
@@ -22,6 +23,14 @@ public class FirstActivity extends FragmentActivity implements View.OnClickListe
     Button mRegister = null;
     Context mContext = FirstActivity.this;
 
+    static {
+        try {
+            System.loadLibrary("test");
+        } catch (UnsatisfiedLinkError ule) {
+            Log.e("HelloC", "WARNING: Could not load native library: " + ule.getMessage());
+        }
+    }
+    public native String getString();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,10 +40,13 @@ public class FirstActivity extends FragmentActivity implements View.OnClickListe
 
         mBookRide.setOnClickListener(this);
         mRegister.setOnClickListener(this);
-        if ( SecuridePreferences.isRegistered()){
-            startActivity(new Intent(mContext, MapsActivity.class));
-            finish();
-        }
+//        if ( SecuridePreferences.isRegistered()){
+//            startActivity(new Intent(mContext, MapsActivity.class));
+//            finish();
+//        }
+        String text = getString();
+        Log.i("Hello test",text);
+        JNIConnectionManager.getConnectionManager().setupSocket();
     }
 
     @Override
