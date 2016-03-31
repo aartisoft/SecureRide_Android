@@ -4,14 +4,15 @@ import android.location.Address;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.securide.custmer.model.AddressObject;
 
 /**
  * Created by pradeep.kumar on 3/14/16.
  */
 public class AddressController {
     private static AddressController mInstance = new AddressController();
-    private String mDestinationAddress = null;
-    private String mSourceAddress = null;
+    private AddressObject mDestinationAddress = null;
+    private AddressObject mSourceAddress = null;
 
     private LatLng SourceLocaton = null;
     private LatLng DestinationLocaton = null;
@@ -24,19 +25,19 @@ public class AddressController {
         return mInstance;
     }
 
-    public void setSelectedDestinationAddress(String address){
+    public void setSelectedDestinationAddress(AddressObject address){
         mDestinationAddress = address;
     }
 
-    public String getSelectedDestinationAddress(){
+    public AddressObject getSelectedDestinationAddress(){
         return mDestinationAddress;
     }
 
-    public void setSelectedSourceAddress(String address){
+    public void setSelectedSourceAddress(AddressObject address){
         mSourceAddress = address;
     }
 
-    public String getSelectedSourceAddress(){
+    public AddressObject getSelectedSourceAddress(){
         return mSourceAddress;
     }
 

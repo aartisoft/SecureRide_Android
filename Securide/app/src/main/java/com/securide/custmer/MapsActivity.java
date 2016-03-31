@@ -28,8 +28,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.securide.custmer.Util.Constants;
 import com.securide.custmer.Util.MyLocation;
 import com.securide.custmer.Util.MyLocation.LocationResult;
+import com.securide.custmer.connection.core.JNIConnectionManager;
 import com.securide.custmer.controllers.AddressController;
 import com.securide.custmer.listeners.IMapListener;
+import com.securide.custmer.model.AddressObject;
 import com.securide.custmer.preferences.SecuridePreferences;
 
 import java.util.ArrayList;
@@ -152,37 +154,43 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
                 != PackageManager.PERMISSION_GRANTED) {
 
 
-                ActivityCompat.requestPermissions(this,
-                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},101);
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
 
-        }else {
+        } else {
             getCurrentLocation();
         }
 
 
     }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 101: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getCurrentLocation();
 
                 } else {
-                 finish();
-                 Toast.makeText(MapsActivity.this,"SecuRide can't work without this Permission",Toast.LENGTH_SHORT).show();
+                    finish();
+                    Toast.makeText(MapsActivity.this, "SecuRide can't work without this Permission", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
 
-        String address = AddressController.getInstance().getSelectedDestinationAddress();
-        mDropPoint.setText(address);
-        mPickupPoint.setText(AddressController.getInstance().getSelectedSourceAddress());
+        if (AddressController.getInstance().getSelectedDestinationAddress() != null) {
+            String address = AddressController.getInstance().getSelectedDestinationAddress().getFormatedAddress();
+            mDropPoint.setText(address);
+        }
+        if (AddressController.getInstance().getSelectedSourceAddress() != null) {
+            mPickupPoint.setText(AddressController.getInstance().getSelectedSourceAddress().getFormatedAddress());
+        }
         if (AddressController.getInstance().getSourceLocaton() != null) {
             mapFragment.updatePickUpLocation(AddressController.getInstance().getSourceLocaton());
         }
@@ -218,6 +226,15 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
         } else if (selectedCabIndex == 2) {
             vwThirdCab.setImageResource(R.drawable.car_spl_selected);
         }
+        getCabAvailability();
+    }
+
+    void getCabAvailability() {
+        int cabType = selectedCabIndex + 1;
+        JNIConnectionManager.getConnectionManager().
+                JNIGetCabAvailability(cabType,
+                        AddressController.getInstance().getSelectedSourceAddress(),
+                        AddressController.getInstance().getSelectedDestinationAddress());
     }
 
     @Override
@@ -235,10 +252,18 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
                 try {
                     address = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                     if (address.size() > 0) {
+                        AddressObject addressObject = new AddressObject();
                         String addr = address.get(0).getAddressLine(0);
                         String city = address.get(0).getAddressLine(1);
                         String country = address.get(0).getAddressLine(2);
+                        addressObject.setStreatName(addr);
+                        addressObject.setCity(city);
+                        addressObject.setCountry(country);
                         mPickupAddress = addr.concat(city).concat(country);
+                        addressObject.setFormatedAddress(mPickupAddress);
+                        addressObject.setLattitude(Double.toString(location.getLatitude()));
+                        addressObject.setLongitude(Double.toString(location.getLongitude()));
+                        AddressController.getInstance().setSelectedSourceAddress(addressObject);
                     }
                 } catch (Exception e) {
 
@@ -246,7 +271,7 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AddressController.getInstance().setSelectedSourceAddress(mPickupAddress);
+
                         onCurrentAddress(mPickupAddress);
                     }
                 });

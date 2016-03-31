@@ -53,6 +53,8 @@ public class GetAddressTask  {
 
             // sb.append("&components=country:in");
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
+            System.out
+                    .println(sb);
 
             HTTPHandler handler = HTTPHandler.defaultHandler();
             // Create a JSON object hierarchy from the results

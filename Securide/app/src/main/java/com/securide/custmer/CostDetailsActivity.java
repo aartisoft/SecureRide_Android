@@ -26,9 +26,9 @@ public class CostDetailsActivity extends AppCompatActivity implements View.OnCli
         btnReject = (Button)findViewById(R.id.Reject);
         btnReject.setOnClickListener(this);
         tvPick_point = (TextView)findViewById(R.id.pick_point);
-        tvPick_point.setText(AddressController.getInstance().getSelectedSourceAddress());
+        tvPick_point.setText(AddressController.getInstance().getSelectedSourceAddress().getFormatedAddress());
         tvDrop_point = (TextView)findViewById(R.id.drop_point);
-        tvDrop_point.setText(AddressController.getInstance().getSelectedDestinationAddress());
+        tvDrop_point.setText(AddressController.getInstance().getSelectedDestinationAddress().getFormatedAddress());
     }
 
     @Override
