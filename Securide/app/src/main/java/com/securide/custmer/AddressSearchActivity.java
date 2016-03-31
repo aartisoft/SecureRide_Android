@@ -66,6 +66,7 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
             if (mAddressListAdapter != null) {
                 mAddressListAdapter.setSelectedAddress(position);
                 closeKeyBoard();
+                setAddress();
             }
         }
     };
@@ -102,31 +103,30 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ok_btn:
-                if (mAddressListAdapter != null) {
-                    String place_id = null;
-                    if (isPickUp){
-                        AddressController.getInstance().setSelectedSourceAddress(mAddressListAdapter.getSelectedItem());
-                    }else{
-                        AddressController.getInstance().setSelectedDestinationAddress(mAddressListAdapter.getSelectedItem());
-                    }
-                    try {
-                        place_id = placePredsJsonArray.getJSONObject(mAddressListAdapter.mSelectedAddressIndex).getString("place_id");
-                        new GeocodeAsnc().execute(place_id);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        finish();
-                    }
-                    // Toast.makeText(getActivity(), str+" : "+place_id,
-                    // Toast.LENGTH_SHORT).show();
-
-
-
-                }
-
+                setAddress();
                 break;
         }
     }
+    private void setAddress(){
+        if (mAddressListAdapter != null) {
+            String place_id = null;
+            if (isPickUp) {
+                AddressController.getInstance().setSelectedSourceAddress(mAddressListAdapter.getSelectedItem());
+            } else {
+                AddressController.getInstance().setSelectedDestinationAddress(mAddressListAdapter.getSelectedItem());
+            }
+            try {
+                place_id = placePredsJsonArray.getJSONObject(mAddressListAdapter.mSelectedAddressIndex).getString("place_id");
+                new GeocodeAsnc().execute(place_id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                finish();
+            }
+            // Toast.makeText(getActivity(), str+" : "+place_id,
+            // Toast.LENGTH_SHORT).show();
+        }
 
+    }
     private void initSearchTask(String keyword) {
         if (mGetAddressTask == null) {
             mGetAddressTask = new GetAddressTask(mContext, keyword, this);
