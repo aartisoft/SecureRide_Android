@@ -3,6 +3,7 @@ package com.securide.custmer.connection.core;
 import android.util.Log;
 
 import com.securide.custmer.model.AddressObject;
+import com.securide.custmer.model.TaxiTrip;
 
 /**
  * Created by android_studio on 3/29/16.
@@ -17,7 +18,7 @@ public class JNIConnectionManager {
         }
     }
     public native int setupNativeTcpSocket();
-    public native String getCabAvailability(int cabType,AddressObject source, AddressObject destinatin);
+    public native TaxiTrip getCabAvailability(int cabType,AddressObject source, AddressObject destinatin, TaxiTrip result);
     static JNIConnectionManager connectionManager = null;
     int socketId;
     public  static JNIConnectionManager getConnectionManager(){
@@ -37,8 +38,8 @@ public class JNIConnectionManager {
 
     public void JNIGetCabAvailability(int cabType, AddressObject source, AddressObject destinatin){
 
-        String result =  getCabAvailability(cabType,source,destinatin);
-        Log.i("getCabAvailability",result);
+        TaxiTrip result =  getCabAvailability(cabType,source,destinatin,new TaxiTrip());
+        Log.i("getCabAvailability--> result.getOpCode",result.getOpCode());
     }
 
 
