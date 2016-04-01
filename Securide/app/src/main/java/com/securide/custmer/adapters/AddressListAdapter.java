@@ -43,6 +43,10 @@ public class AddressListAdapter extends ArrayAdapter<String> {
         mAddressList.addAll(addressList);
         notifyDataSetChanged();
     }
+    public void clearList(){
+        mAddressList.clear();
+        notifyDataSetChanged();
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

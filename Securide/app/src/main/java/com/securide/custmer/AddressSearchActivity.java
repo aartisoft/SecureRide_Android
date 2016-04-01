@@ -1,8 +1,6 @@
 package com.securide.custmer;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +12,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.securide.custmer.Util.Constants;
@@ -22,6 +22,7 @@ import com.securide.custmer.adapters.AddressListAdapter;
 import com.securide.custmer.controllers.AddressController;
 import com.securide.custmer.listeners.IAddressListener;
 import com.securide.custmer.model.AddressObject;
+import com.securide.custmer.preferences.SecuridePreferences;
 import com.securide.custmer.tasks.GetAddressTask;
 
 import org.apache.http.NameValuePair;
@@ -48,6 +49,11 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
     String mLattitude, mLongitude;
     JSONArray placePredsJsonArray;
     AddressObject addressObject;
+    TextView add_home,add_work;
+    RelativeLayout homeAddressLayout,workAddressLayout;
+    TextView homeAddress, homeAddressChange,workAddress,workAddressChange;
+    private  boolean homeAddressChangeClicked = false;
+    private  boolean workAddressChangeClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +66,42 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
         mOkButton = (Button) findViewById(R.id.ok_btn);
         mOkButton.setOnClickListener(this);
         mAddressEditText.addTextChangedListener(mAddressKeywordListener);
+        add_home = (TextView)findViewById(R.id.add_home);
+        add_home.setOnClickListener(this);
+        add_work = (TextView)findViewById(R.id.add_work);
+        add_work.setOnClickListener(this);
+
+        homeAddressLayout = (RelativeLayout) findViewById(R.id.homeAddressLayout);
+        homeAddressLayout.setOnClickListener(this);
+        homeAddress = (TextView) findViewById(R.id.homeAddress);
+        homeAddressChange = (TextView)findViewById(R.id.homeAddressChange);
+        homeAddressChange.setOnClickListener(this);
+        if (!SecuridePreferences.getHomeAdddress().equals("")){
+            homeAddressLayout.setVisibility(View.VISIBLE);
+            homeAddress.setText(SecuridePreferences.getHomeAdddress());
+            add_home.setVisibility(View.GONE);
+        }
+
+        workAddressLayout = (RelativeLayout) findViewById(R.id.workAddressLayout);
+        workAddressLayout.setOnClickListener(this);
+        workAddress = (TextView) findViewById(R.id.workAddress);
+        workAddressChange = (TextView)findViewById(R.id.workAddressChange);
+        workAddressChange.setOnClickListener(this);
+        if (!SecuridePreferences.getWorkAdddress().equals("")){
+            workAddressLayout.setVisibility(View.VISIBLE);
+            workAddress.setText(SecuridePreferences.getWorkAdddress());
+            add_work.setVisibility(View.GONE);
+        }
     }
 
     AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (mAddressListAdapter != null) {
-                mAddressListAdapter.setSelectedAddress(position);
-                closeKeyBoard();
-                setAddress();
-            }
+                if (mAddressListAdapter != null) {
+                    mAddressListAdapter.setSelectedAddress(position);
+                    closeKeyBoard();
+                    setAddress();
+                }
         }
     };
 
@@ -77,6 +109,7 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             //do noop
+
         }
 
         @Override
@@ -90,6 +123,7 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
 
         @Override
         public void afterTextChanged(Editable s) {
+            findViewById(R.id.mProgressbar).setVisibility(View.VISIBLE);
             // user typed: start the timer
             mSearchTextTimer = new Timer();
             mSearchTextTimer.schedule(new TimerTask() {
@@ -106,6 +140,81 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
         switch (v.getId()) {
             case R.id.ok_btn:
                 setAddress();
+                break;
+            case R.id.add_home:
+                homeAddressLayout.setVisibility(View.GONE);
+                add_home.setVisibility(View.GONE);
+                workAddressLayout.setVisibility(View.GONE);
+                add_work.setVisibility(View.GONE);
+                ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).
+                        toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                homeAddressChangeClicked = true;
+                workAddressChangeClicked = false;
+                break;
+            case R.id.homeAddressChange:
+                homeAddressLayout.setVisibility(View.GONE);
+                add_home.setVisibility(View.GONE);
+                workAddressLayout.setVisibility(View.GONE);
+                add_work.setVisibility(View.GONE);
+                ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).
+                        toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                homeAddressChangeClicked = true;
+                workAddressChangeClicked = false;
+                break;
+            case R.id.add_work:
+                workAddressLayout.setVisibility(View.GONE);
+                add_work.setVisibility(View.GONE);
+                homeAddressLayout.setVisibility(View.GONE);
+                add_home.setVisibility(View.GONE);
+                ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).
+                        toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                workAddressChangeClicked = true;
+                homeAddressChangeClicked = false;
+                break;
+            case R.id.workAddressChange:
+                workAddressLayout.setVisibility(View.GONE);
+                add_work.setVisibility(View.GONE);
+                homeAddressLayout.setVisibility(View.GONE);
+                add_home.setVisibility(View.GONE);
+                ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).
+                        toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                workAddressChangeClicked = true;
+                homeAddressChangeClicked = false;
+                break;
+            case R.id.homeAddressLayout:
+                String[] latlong =  SecuridePreferences.getHomeLocation().split(";");
+                double latitude = Double.parseDouble(latlong[0]);
+                double longitude = Double.parseDouble(latlong[1]);
+                LatLng location = new LatLng(latitude,longitude);
+                String address = SecuridePreferences.getHomeAdddress();
+                AddressObject object = new AddressObject();
+                object.setFormatedAddress(address);
+                if (isPickUp) {
+                    AddressController.getInstance().setSourceLocaton(location);
+                    AddressController.getInstance().setSelectedSourceAddress(object);
+                }else{
+                    AddressController.getInstance().setDestinationLocaton(location);
+                    AddressController.getInstance().setSelectedDestinationAddress(object);
+                }
+                finish();
+                break;
+            case R.id.workAddressLayout:
+                String[] latlong1 =  SecuridePreferences.getWorkLocation().split(";");
+                double latitude1 = Double.parseDouble(latlong1[0]);
+                double longitude1 = Double.parseDouble(latlong1[1]);
+                LatLng location1 = new LatLng(latitude1,longitude1);
+                String address1 = SecuridePreferences.getWorkAdddress();
+                AddressObject object1 = new AddressObject();
+                object1.setFormatedAddress(address1);
+
+                if (isPickUp) {
+                    AddressController.getInstance().setSourceLocaton(location1);
+                    AddressController.getInstance().setSelectedSourceAddress(object1);
+                }else{
+                    AddressController.getInstance().setDestinationLocaton(location1);
+                    AddressController.getInstance().setSelectedDestinationAddress(object1);
+                }
+                finish();
                 break;
         }
     }
@@ -140,7 +249,7 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
+                findViewById(R.id.mProgressbar).setVisibility(View.GONE);
                 if (mAddressListAdapter == null && list != null) {
                     mAddressListAdapter = new AddressListAdapter(mContext, 0, list);
                     mSearchListView.setAdapter(mAddressListAdapter);
@@ -173,6 +282,11 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
     }
 
     public class GeocodeAsnc extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            findViewById(R.id.mProgressbar).setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -230,7 +344,7 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
                 System.out.println("Lattitude : " + mLattitude);
                 System.out.println("Longitude : " + mLongitude);
 
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
@@ -241,16 +355,50 @@ public class AddressSearchActivity extends AppCompatActivity implements View.OnC
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            findViewById(R.id.mProgressbar).setVisibility(View.GONE);
             LatLng location = new LatLng(Double.parseDouble(mLattitude),Double.parseDouble(mLongitude));
-
-            if (isPickUp){
-                AddressController.getInstance().setSourceLocaton(location);
-                AddressController.getInstance().setSelectedSourceAddress(addressObject);
-            }else{
-                AddressController.getInstance().setDestinationLocaton(location);
-                AddressController.getInstance().setSelectedDestinationAddress(addressObject);
+            if(mAddressListAdapter != null) {
+                mAddressListAdapter.clearList();
+                mAddressEditText.setText("");
             }
-            finish();
+            if(homeAddressChangeClicked){
+                SecuridePreferences.setHomeAddress(addressObject.getFormatedAddress(),mLattitude+";"+mLongitude);
+                homeAddressLayout.setVisibility(View.VISIBLE);
+                homeAddress.setText(SecuridePreferences.getHomeAdddress());
+                add_home.setVisibility(View.GONE);
+                if (!SecuridePreferences.getWorkAdddress().equals("")){
+                    workAddressLayout.setVisibility(View.VISIBLE);
+                    workAddress.setText(SecuridePreferences.getWorkAdddress());
+                    add_work.setVisibility(View.GONE);
+                }else {
+                    workAddressLayout.setVisibility(View.GONE);
+                    add_work.setVisibility(View.VISIBLE);
+                }
+            }else if(workAddressChangeClicked){
+                SecuridePreferences.setWorkAddress(addressObject.getFormatedAddress(),mLattitude+";"+mLongitude);
+                workAddressLayout.setVisibility(View.VISIBLE);
+                workAddress.setText(SecuridePreferences.getWorkAdddress());
+                add_work.setVisibility(View.GONE);
+                if (!SecuridePreferences.getHomeAdddress().equals("")){
+                    homeAddressLayout.setVisibility(View.VISIBLE);
+                    homeAddress.setText(SecuridePreferences.getHomeAdddress());
+                    add_home.setVisibility(View.GONE);
+                }else {
+                    homeAddressLayout.setVisibility(View.GONE);
+                    add_home.setVisibility(View.VISIBLE);
+                }
+
+            }
+            else {
+                if (isPickUp) {
+                    AddressController.getInstance().setSourceLocaton(location);
+                    AddressController.getInstance().setSelectedSourceAddress(addressObject);
+                }else{
+                    AddressController.getInstance().setDestinationLocaton(location);
+                    AddressController.getInstance().setSelectedDestinationAddress(addressObject);
+                }
+                finish();
+            }
         }
 
     }
