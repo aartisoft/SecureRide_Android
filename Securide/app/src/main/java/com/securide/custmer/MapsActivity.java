@@ -1,6 +1,7 @@
 package com.securide.custmer;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -9,11 +10,13 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.securide.custmer.Util.Constants;
+import com.securide.custmer.Util.HTTPHandler;
 import com.securide.custmer.Util.MyLocation;
 import com.securide.custmer.Util.MyLocation.LocationResult;
 import com.securide.custmer.connection.core.JNIConnectionManager;
@@ -161,7 +165,6 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
             getCurrentLocation();
         }
 
-
     }
 
     @Override
@@ -183,7 +186,11 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
     @Override
     protected void onResume() {
         super.onResume();
-
+        if(!HTTPHandler.defaultHandler().isConnectingToInternet(this)){
+            HTTPHandler.defaultHandler().showDialog(this,"No Internet Connectivity Found");
+            return;
+        }
+        checkLocationEnabled();
         if (AddressController.getInstance().getSelectedDestinationAddress() != null) {
             String address = AddressController.getInstance().getSelectedDestinationAddress().getFormatedAddress();
             mDropPoint.setText(address);
@@ -312,6 +319,41 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
         };
         if (myLocation.getLocation(getApplicationContext(),
                 locationResult)) {
+        }
+    }
+
+    private void checkLocationEnabled(){
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {}
+
+        if(!gps_enabled) {
+            // notify user
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(MapsActivity.this);
+            dialog.setMessage(getResources().getString(R.string.gps_network_not_enabled));
+            dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                    //get gps
+                }
+            });
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                    paramDialogInterface.dismiss();
+                }
+            });
+            dialog.show();
+        }else {
+            getCurrentLocation();
         }
     }
 }
