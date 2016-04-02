@@ -36,7 +36,16 @@ import org.apache.http.impl.conn.SingleClientConnManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+
+import com.securide.custmer.R;
 
 public class HTTPHandler {
 
@@ -389,5 +398,33 @@ public class HTTPHandler {
 			}
 		}
 
+	}
+
+	public boolean isConnectingToInternet(Context context){
+		ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivity != null)
+		{
+			NetworkInfo[] info = connectivity.getAllNetworkInfo();
+			if (info != null)
+				for (int i = 0; i < info.length; i++)
+					if (info[i].getState() == NetworkInfo.State.CONNECTED)
+					{
+						return true;
+					}
+
+		}
+		return false;
+	}
+	public  void showDialog(Context context,String message){
+		final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+		dialog.setMessage(message);
+		dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+				paramDialogInterface.dismiss();
+			}
+		});
+
+		dialog.show();
 	}
 }
