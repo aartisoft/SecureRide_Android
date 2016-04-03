@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -12,18 +13,23 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -259,6 +265,7 @@ public class MapsFragment extends Fragment implements LocationListener {
                 @Override
                 public void onMapLoaded() {
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, 15);
+                  //  mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
                     mGoogleMap.animateCamera(cameraUpdate);
                 }
             });
@@ -267,4 +274,6 @@ public class MapsFragment extends Fragment implements LocationListener {
             e.printStackTrace();
         }
     }
+
+
 }

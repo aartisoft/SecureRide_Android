@@ -38,6 +38,8 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
     static MapsFragment mapFragment;
     private Handler handler = new Handler();
     private LatLng location;
+    double lat[]= {12.980424,12.984272,12.987952,12.991799};
+    double lon[] = {77.632914,77.644072,77.652998,77.662268};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +129,8 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
         Runnable updateMarker = new Runnable() {
             @Override
             public void run() {
-                String message = JNIConnectionManager.getConnectionManager().JNIGetGpsMapDetails();
+
+               String message = JNIConnectionManager.getConnectionManager().JNIGetGpsMapDetails();
                 Log.e("Lat Long : ","Value: "+message);
                 if (!message.contains(";")) {
                 }else{
