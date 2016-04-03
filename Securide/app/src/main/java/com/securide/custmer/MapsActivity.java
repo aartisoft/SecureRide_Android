@@ -60,6 +60,7 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
     LocationResult result;
     String mPickupAddress;
     LocationManager locMan;
+    private boolean isGpsDialogShown = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,7 +191,9 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
             HTTPHandler.defaultHandler().showDialog(this,"No Internet Connectivity Found");
             return;
         }
-        checkLocationEnabled();
+        if(!isGpsDialogShown) {
+            checkLocationEnabled();
+        }
         if (AddressController.getInstance().getSelectedDestinationAddress() != null) {
             String address = AddressController.getInstance().getSelectedDestinationAddress().getFormatedAddress();
             mDropPoint.setText(address);
@@ -323,6 +326,7 @@ public class MapsActivity extends FragmentActivity implements IMapListener {
     }
 
     private void checkLocationEnabled(){
+        isGpsDialogShown = true;
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
 

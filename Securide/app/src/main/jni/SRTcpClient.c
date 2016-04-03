@@ -39,10 +39,10 @@ int rtFd;
     sockIn.sin_port = portNumber;
     conprintf(" conneting on port %d to server %u.%u.%u.%u \n",
                portNumber,
-               ((unsigned char *)&serverIpAddr)[0], 	
-               ((unsigned char *)&serverIpAddr)[1], 	
-               ((unsigned char *)&serverIpAddr)[2], 	
-               ((unsigned char *)&serverIpAddr)[3]); 	
+               ((unsigned char *)&serverIpAddr)[0],
+               ((unsigned char *)&serverIpAddr)[1],
+               ((unsigned char *)&serverIpAddr)[2],
+               ((unsigned char *)&serverIpAddr)[3]);
 
     /* do a connect and it should return */
     conprintf("GOING TO CONNECT\n");
@@ -59,13 +59,13 @@ int rtFd;
             case  ETIMEDOUT:
                 conprintf("tyring to connect timed out\n");
                 close(s);
-                 rtFd=-1;                
+                 rtFd=-1;
             break;
 
             case ECONNREFUSED:
                 conprintf("server not present\n");
                 close(s);
-                rtFd=-1;                
+                rtFd=-1;
             break;
 
             default:
@@ -77,7 +77,7 @@ int rtFd;
      }
      else
      {
-         conprintf("create socket. RetCode %d\n", retCode); 
+         conprintf("create socket. RetCode %d\n", retCode);
      }
     if (rtFd != -1)
     {
@@ -98,7 +98,7 @@ int setupTcpSocket(int portNum, unsigned long servIPaddr)
     {
       conprintf("CANNOT CREATE TCP socket. port %d\n", portNum);
       return(-1);
-    }  
+    }
     return(tcpFd);
 }
 /*****************************************************
@@ -106,18 +106,18 @@ int setupTcpSocket(int portNum, unsigned long servIPaddr)
 * buffer to the server and then waits for the response from the server.
 * It receives the response in the msgRecv buffer from the server.
 *
-* void sendAndRcvMessage(int socketId, unsigned char *msgSent, 
+* void sendAndRcvMessage(int socketId, unsigned char *msgSent,
 *   unsigned  char *msgRecv )
 *
 *****************************************************/
  void sendAndRcvMessage(int socketId, unsigned  char *msgSent, unsigned  char *msgRecv , short msgSize)
 {
     int numBytes;
-          
+
             /* write the message to the socket that is connected
                to the server. */
 
-            numBytes = write(socketId,msgSent,TAXIMSG_SIZE); 
+            numBytes = write(socketId,msgSent,TAXIMSG_SIZE);
             if(numBytes<0)
             {
               conprintf("cannot send on the socket\n");
@@ -126,13 +126,13 @@ int setupTcpSocket(int portNum, unsigned long servIPaddr)
             /* Now wait for the response from the server and receiv it
               in the msgRecv Buffer */
             conprintf("waiting for Server\n");
-            numBytes = read(socketId,msgRecv,TAXIMSG_SIZE); 
+            numBytes = read(socketId,msgRecv,TAXIMSG_SIZE);
             conprintf(" number of bytes received. %d\n", numBytes);
 }
 /***********************************************************
-* This function sends the RIDE REQUEST  message to the   
-* server and receives the response.   
-* void requestRide(int socketId, unsigned char *msgSent, 
+* This function sends the RIDE REQUEST  message to the
+* server and receives the response.
+* void requestRide(int socketId, unsigned char *msgSent,
 *   unsigned  char *msgRecv )
 *
 *****************************************************/
@@ -146,11 +146,11 @@ TAXITRIP_t processUserRequest(int socketId, const char* firstName, const char* m
     tripSnt = (TAXITRIP_t *)&msgSent;
     tripRcv = (TAXITRIP_t *)&msgRecv;
     //tripSnt->tripAddress.passangerFirstName = (unsigned char *)malloc(MAX_NAME_LENGTH);
-    
+
     tripSnt->header.opCode = TAXI_REQUEST;
     tripSnt->driverNumber = 0; /*will be filled in by server and
-                                 reply back*/ 
-    tripSnt->appType = CUSTOMER_APP; 
+                                 reply back*/
+    tripSnt->appType = CUSTOMER_APP;
     tripSnt->taxiType = cabType;
 
     /* passanger information*/
@@ -181,32 +181,32 @@ TAXITRIP_t processUserRequest(int socketId, const char* firstName, const char* m
     tripSnt->customerGPS.longitudeMinutes= dropLong;
     tripSnt->customerGPS.EorW = 'E';
 
-    /*Now this function will send the message to the server and wait 
+    /*Now this function will send the message to the server and wait
     for response from the server. It will send the message content
     that contained in the msgSent buffer and when the response from
-    the server is received this function will copy it to the msgrecv 
+    the server is received this function will copy it to the msgrecv
     buffer.
-    This function sendAndRcvMessage does not retunr until the 
+    This function sendAndRcvMessage does not retunr until the
     message is received from the server */
 
     sendAndRcvMessage(socketId,msgSent,msgRecv ,TAXIMSG_SIZE);
 
     /* print the content of the message received */
     conprintf("\n\nSERVER RESPONSE: opCode %d\n",
-     tripRcv->header.opCode); 
-    conprintf("taxi number:-> %s\n",tripRcv->taxiNumber); 
-    conprintf("driver number:-> %d\n",tripRcv->driverNumber); 
-    conprintf("taxi Driver name: %s\n",tripRcv->driverName); 
+     tripRcv->header.opCode);
+    conprintf("taxi number:-> %s\n",tripRcv->taxiNumber);
+    conprintf("driver number:-> %d\n",tripRcv->driverNumber);
+    conprintf("taxi Driver name: %s\n",tripRcv->driverName);
     conprintf("taxi Driver name: %s\n",tripRcv->tripAddress.passangerFirstName);
 
     conprintf("estimated trip time: %d hour %d minutes\n",
             tripRcv->tripTime.estimatedHours,
-    tripRcv->tripTime.estimatedMinutes); 
+    tripRcv->tripTime.estimatedMinutes);
     conprintf("estimated trip Cost: %s \n",
-    tripRcv->estimatedCost); 
+    tripRcv->estimatedCost);
     conprintf("estimated driver Arrival time: %d hour %d minutes\n",
             tripRcv->driverArrivalTime.estimatedHours,
-    tripRcv->driverArrivalTime.estimatedMinutes); 
+    tripRcv->driverArrivalTime.estimatedMinutes);
 
     return *tripRcv;
 }
@@ -217,20 +217,20 @@ TAXITRIP_t checkForAvailableCab(int socketId, int taxiType, const char* pickupSt
     unsigned char msgRecv[TAXIMSG_SIZE];/*buffer to receiving meesage from server*/
     TAXITRIP_t * tripSnt; /* pointer to the meesage sending buffer */
     TAXITRIP_t  *tripRcv;  /* pointer to the meesage receive buffer */
-    
+
     tripSnt = (TAXITRIP_t *)&msgSent;
     tripRcv = (TAXITRIP_t *)&msgRecv;
     tripSnt->header.opCode = GET_CAB_AVAILABILITY;
     tripSnt->appType = CUSTOMER_APP;
     tripSnt->taxiType = taxiType;/*options here are LEMOSINE, REGULAR_CAB, or SPECIAL_ASSIST_CAB */
-    
+
     /* where the passanger is beng picked up*/
      strcpy(tripSnt->tripAddress.pickupStreetName,pickupStretName);
      tripSnt->tripAddress.pickupBuildingNumber=pickupBuildingNo;
      strcpy(tripSnt->tripAddress.pickupCity,pickupCity);
      tripSnt->tripAddress.pickupZipCode=pickupPinCode;
      strcpy(tripSnt->tripAddress.pickupLandMarkDesc, pickupLandmark);
-    
+
     /* Now setup the GPS cordinates of where the customer is */
     tripSnt->customerGPS.latitudeDegrees= pickupLat;
     tripSnt->customerGPS.latitudeMinutes= pickupLong;
@@ -250,7 +250,7 @@ TAXITRIP_t checkForAvailableCab(int socketId, int taxiType, const char* pickupSt
      different type of cab is available, the cab type
      that is available is returned in the taxiType
      field */
-    
+
     if (tripRcv->header.opCode == CAB_AVAILABLE)
     {
         conprintf("Cab requested is available.\n");
@@ -311,10 +311,10 @@ TAXITRIP_t processUserAcceptOrRejectCabRequest(int socketId, unsigned short taxi
     unsigned char msgRecv[TAXIMSG_SIZE];/*buffer to receiving meesage from server*/
     TAXITRIP_t * tripSnt; /* pointer to the meesage sending buffer */
     TAXITRIP_t  *tripRcv;  /* pointer to the meesage receive buffer */
-    
+
     tripSnt = (TAXITRIP_t *)&msgSent;
     tripRcv = (TAXITRIP_t *)&msgRecv;
-    
+
     tripSnt->header.opCode = requestType;
     tripSnt->appType = CUSTOMER_APP;
     tripSnt->taxiType = taxiType;/*options here are LEMOSINE, REGULAR_CAB, or SPECIAL_ASSIST_CAB */
@@ -326,7 +326,7 @@ TAXITRIP_t processUserAcceptOrRejectCabRequest(int socketId, unsigned short taxi
     /* now send out a message and get the response back */
     sendAndRcvMessage(socketId,msgSent,msgRecv ,TAXIMSG_SIZE);
     /* check the received response is confirmation */
-    
+
     if (tripRcv->header.opCode == SERVER_CONFIRMED)
     {
         conprintf("Server has confirmed the taxi accept\n");
@@ -343,7 +343,7 @@ TAXITRIP_t processUserAcceptOrRejectCabRequest(int socketId, unsigned short taxi
 *
 * This function never returns it get the GPS coorindates from the server
 *  and then prints ths th response to the screen. In real the android cutomer
-*  App the cordinates received will be displayed on the map  
+*  App the cordinates received will be displayed on the map
 *
 ********************************************/
 GPSCORD_t fetchDriverLocationDetails(int socketId)
@@ -361,25 +361,25 @@ GPSCORD_t  *driverLocation;
       {
         conprintf("waiting for Server. Message num %d\n",
                   count);
-        numBytes = read(socketId,msgBuff,TAXIMSG_SIZE); 
+        numBytes = read(socketId,msgBuff,TAXIMSG_SIZE);
         conprintf("\n\nMESSAGE opCode %d\n",
-                   msgP->header.opCode); 
+                   msgP->header.opCode);
         conprintf("\n\n %d GPS Cordinates: long->%d:%d %c. Lat->%d:%d %c\n",
                    count,
                    driverLocation->longitudeDegrees,
-                   driverLocation->longitudeMinutes, 
-                   driverLocation->NorS, 
-                   driverLocation->latitudeDegrees, 
-                   driverLocation->latitudeMinutes, 
-                   driverLocation->EorW 
-                     ); 
-       
+                   driverLocation->longitudeMinutes,
+                   driverLocation->NorS,
+                   driverLocation->latitudeDegrees,
+                   driverLocation->latitudeMinutes,
+                   driverLocation->EorW
+                     );
+
         count++;
       }
     return *driverLocation;
 }
 /****************************************************************
-* This is the main entyr point where the program starts execution. 
+* This is the main entyr point where the program starts execution.
 *****************************************************************/
 int main()
 {

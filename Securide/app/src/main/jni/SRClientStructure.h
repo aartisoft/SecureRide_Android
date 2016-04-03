@@ -193,10 +193,10 @@ struct taxiTrip
     TAXI_HEADER_t header;
     unsigned short appType; /* application type*/
     unsigned short taxiType;
-    char  taxiNumber[MAX_LICENSE_LENGTH];
+    unsigned short taxiNumber;
     unsigned short driverNumber;
-    char  driverName[MAX_NAME_LENGTH];
-    
+    unsigned char  driverName[MAX_NAME_LENGTH];
+
     TRIPADDRESS_t tripAddress;
     TRIPTIME_t    tripTime;
     TRIPTIME_t    driverArrivalTime;
@@ -204,7 +204,7 @@ struct taxiTrip
     char estimatedCost[12];
     GPSCORD_t customerGPS;
     GPSCORD_t driverGPS;
-    
+
 };
 typedef struct taxiTrip TAXITRIP_t;
 

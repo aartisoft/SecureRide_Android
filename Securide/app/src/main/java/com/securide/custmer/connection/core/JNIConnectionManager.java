@@ -19,6 +19,7 @@ public class JNIConnectionManager {
     }
     public native int setupNativeTcpSocket();
     public native TaxiTrip getCabAvailability(int cabType,AddressObject source, AddressObject destinatin, TaxiTrip result);
+
     static JNIConnectionManager connectionManager = null;
     int socketId;
     public  static JNIConnectionManager getConnectionManager(){
@@ -36,11 +37,18 @@ public class JNIConnectionManager {
 
     }
 
+    public int getSocketId() {
+        return socketId;
+    }
+
     public void JNIGetCabAvailability(int cabType, AddressObject source, AddressObject destinatin){
 
         TaxiTrip result =  getCabAvailability(cabType,source,destinatin,new TaxiTrip());
         Log.i("getCabAvailability--> result.getOpCode",result.getOpCode());
     }
-
-
+    public native String getTaxiDetails();
+    private native String getTaxiGpsMapDetails(int socketId);
+    public  String JNIGetGpsMapDetails(){
+        return getTaxiGpsMapDetails(socketId);
+    }
 }

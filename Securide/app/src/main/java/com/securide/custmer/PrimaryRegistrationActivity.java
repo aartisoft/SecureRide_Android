@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class PrimaryRegistrationActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText fname,middleName,lname;
-    private EditText mAddress = null;
+   // private EditText mAddress = null;
     private EditText mPhoneNo = null;
     private EditText mEmail = null;
     private EditText mPassword = null;
@@ -35,7 +35,7 @@ public class PrimaryRegistrationActivity extends AppCompatActivity implements Vi
         fname = (EditText) findViewById(R.id.fname);
         middleName = (EditText) findViewById(R.id.middleName);
         lname = (EditText) findViewById(R.id.lname);
-        mAddress = (EditText) findViewById(R.id.address);
+       // mAddress = (EditText) findViewById(R.id.address);
         mPhoneNo = (EditText) findViewById(R.id.phno);
         mEmail = (EditText) findViewById(R.id.email);
         mPassword = (EditText) findViewById(R.id.password);
@@ -61,12 +61,12 @@ public class PrimaryRegistrationActivity extends AppCompatActivity implements Vi
                     lname.setError(" Last Name is empty");
                     isFormError = true;
                 }
-                if (!TextUtils.isEmpty(mAddress.getText())){
+               /* if (!TextUtils.isEmpty(mAddress.getText())){
                     mAddress.setError(null);
                 }else{
                     mAddress.setError(" Address is empty");
                     isFormError = true;
-                }
+                }*/
                 if (!TextUtils.isEmpty(mPhoneNo.getText()) && mPhoneNo.getText().toString().length() == 8){
                     mPhoneNo.setError(null);
                 }else{
@@ -102,7 +102,7 @@ public class PrimaryRegistrationActivity extends AppCompatActivity implements Vi
                     customerProfileObject.setFname(fname.getText().toString());
                     customerProfileObject.setMiddleName(middleName.getText().toString());
                     customerProfileObject.setLname(lname.getText().toString());
-                    customerProfileObject.setAddress(mAddress.getText().toString());
+                    //customerProfileObject.setAddress(mAddress.getText().toString());
                     customerProfileObject.setEmailid(mEmail.getText().toString());
                     customerProfileObject.setPassword(mPassword.getText().toString());
 

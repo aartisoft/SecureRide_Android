@@ -61,12 +61,12 @@ public class AddressListAdapter extends ArrayAdapter<String> {
 //            details.setText(address.getAddressLine(1)+", "+address.getAddressLine(2));
 //        }
 
-        if (mSelectedAddressIndex == position) {
+       /* if (mSelectedAddressIndex == position) {
             convertView.setBackgroundResource(R.drawable.address_selected_box);
             title.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
             details.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
 
-        }
+        }*/
 
         return convertView;
     }

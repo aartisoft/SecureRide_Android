@@ -26,6 +26,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -60,7 +61,7 @@ public class MapsFragment extends Fragment implements LocationListener {
 
     Marker pickupMarker, dropMarker;
     private LatLngBounds.Builder bld;
-
+    Marker cabMarker;
     public MapsFragment() {
         // Required empty public constructor
     }
@@ -243,6 +244,27 @@ public class MapsFragment extends Fragment implements LocationListener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+    void updateCabLocation(final LatLng location) {
+
+        if(cabMarker == null) {
+            cabMarker = mGoogleMap.addMarker(new MarkerOptions().position(location).
+                    icon(BitmapDescriptorFactory.fromResource(R.drawable.cab_marker)));
+        }else {
+            cabMarker.setPosition(location);
+        }
+        try {
+            mGoogleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, 15);
+                    mGoogleMap.animateCamera(cameraUpdate);
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -19,16 +20,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.securide.custmer.connection.core.JNIConnectionManager;
 import com.securide.custmer.controllers.AddressController;
 
 /**
  * Created by pradeep.kumar on 3/16/16.
  */
 public class CabToCustomerActivity extends FragmentActivity implements View.OnClickListener{
-    public static final String TAG = "CabToCustomerActivity : ";
+    public static final String TAG = "CabToCustomerActivity:";
+    private final int MAP_UPDATE_DELAY = 5000;
     private ImageView back,phoneIcon;
     static MapsFragment mapFragment;
+    private Handler handler = new Handler();
+    private LatLng location;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +78,7 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
         }
     }
 
-    public static class PaymentModeDialog extends DialogFragment implements View.OnClickListener {
+    public  class PaymentModeDialog extends DialogFragment implements View.OnClickListener {
         private Button process;
         LinearLayout credit_card_Layout, payme_Cab_Layout;
         @Override
@@ -78,8 +87,8 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             getDialog().getWindow().setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
             WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
-            params.y = 100;
             getDialog().getWindow().setAttributes(params);
+            params.y = 100;
             int divierId = getDialog().getContext().getResources().getIdentifier("android:id/titleDivider", null, null);
             View divider = getDialog().findViewById(divierId);
             try {
@@ -104,15 +113,39 @@ public class CabToCustomerActivity extends FragmentActivity implements View.OnCl
                     break;
                 case R.id.process:
                    getDialog().cancel();
-                   Log.d("Lat",""+AddressController.getInstance().getSourceLocaton());
-                    Log.d("Lon", "" + AddressController.getInstance().getDestinationLocaton());
-                   mapFragment.updatePickUpLocation(AddressController.getInstance().getSourceLocaton());
-                   mapFragment.updateDropLocation(AddressController.getInstance().getDestinationLocaton());
-
-                    break;
+                   //Log.d(TAG, "" + AddressController.getInstance().getSourceLocaton());
+                  // Log.d(TAG, "" + AddressController.getInstance().getDestinationLocaton());
+                 //  mapFragment.updatePickUpLocation(AddressController.getInstance().getSourceLocaton());
+                  // mapFragment.updateDropLocation(AddressController.getInstance().getDestinationLocaton());
+                   handler.postDelayed(updateMarker, 0000);
+                   break;
             }
         }
 
-
     }
+
+        Runnable updateMarker = new Runnable() {
+            @Override
+            public void run() {
+                String message = JNIConnectionManager.getConnectionManager().JNIGetGpsMapDetails();
+                Log.e("Lat Long : ","Value: "+message);
+                if (!message.contains(";")) {
+                }else{
+                    String[] coordinates = message.split(";");
+                    int newSocketId = (Integer.valueOf(coordinates[0]));
+                    int socketId = JNIConnectionManager.getConnectionManager().getSocketId();
+                    if (socketId <= newSocketId) {
+                        socketId = newSocketId;
+                        double longitude = Integer.valueOf(coordinates[1]) + (Integer.valueOf(coordinates[2]) / 60);
+                        double latitude = Integer.valueOf(coordinates[3]) + (Integer.valueOf(coordinates[4]) / 60);
+
+                        location = new LatLng(longitude, latitude);
+                        mapFragment.updateCabLocation(location);
+                        handler.postDelayed(updateMarker, MAP_UPDATE_DELAY);
+
+                    }
+                }
+            }
+        };
+
 }
