@@ -1,22 +1,22 @@
 /****************************************************************************
  * File Name    : clientsrvint.h
- * Description  : secket client interface for taxi
- * Date         : Dec 20   2015
- * Compiler     : gcc (linux)
+ * Description  : secket client interface for taxi 
+ * Date         : Dec 20   2015 
+ * Compiler     : gcc (linux) 
  ***************************************************************************/
 
 /****************************************************************************
  *                        standard header files
  ***************************************************************************/
-/* Note tht all the include files are not required to be included  for any
- Androd app. They are only required for "C" based linux compiling */
+/* Note tht all the include files are not required to be included  for any 
+Androd app. They are only required for "C" based linux compiling */
 
 #include  <stdio.h>
 #include  <sys/types.h>
 #include  <sys/socket.h>
 #include  <netinet/in.h>
 #include  <pwd.h>
-#include  <signal.h>
+#include  <signal.h> 
 #include  <sys/time.h>
 #include  <netdb.h>
 #include  <errno.h>
@@ -30,15 +30,19 @@
 //extern int errno;
 
 /****************************************************************************
- *                      manifest constants (#defines)
+ *                      manifest constants (#defines)  
  ***************************************************************************/
 
 #define MESSAGE_SIZE  200
 #define MAX_NAME_LENGTH 30  /* this is the maximum number of characters for the
-name field. */
+                               name field. */
 #define MAX_LICENSE_LENGTH 20
+#define MAX_BUILD_LENGTH 12
 #define MAX_DESCRIPTION_LENGTH 200
 #define SIZE_OF_CREDIT_CARD_NUM 20
+#define MAX_PHONE_NUMBER  16
+#define MAX_PASSWORD      20
+#define CHANGE_PASSWORD_SET 2
 
 #define CUSTOMER_APP       0
 #define DRIVER_APP         1
@@ -97,68 +101,113 @@ struct tripTime
 };
 typedef struct tripTime  TRIPTIME_t;
 
+struct customerInfo {
+    char customerFirstName[MAX_NAME_LENGTH];
+    char customerMiddleName[MAX_NAME_LENGTH];
+    char customerLastName[MAX_NAME_LENGTH];
+    char customerEmail[MAX_NAME_LENGTH];
+    char customerPhone[MAX_PHONE_NUMBER];
+    char paswrd[MAX_PASSWORD];
+    char newPasswrd[MAX_PASSWORD];
+    short changePaswrdFlag;
+    CREDIT_CARD_INFO_t credit;
+};
+typedef struct customerInfo CUSTOMERINFO_t;
+
 struct tripAddress
 {
-    char passangerFirstName[MAX_NAME_LENGTH];
-    char passangerMiddleName[MAX_NAME_LENGTH];
-    char passangerLastName[MAX_NAME_LENGTH];
-    char destStreetName[MAX_NAME_LENGTH];
-    unsigned short destBuildingNumber;
-    char destCity[MAX_NAME_LENGTH];
-    int destZipCode;
-    char destLandMarkDesc[MAX_DESCRIPTION_LENGTH];
-    char pickupStreetName[MAX_NAME_LENGTH];
-    unsigned short pickupBuildingNumber;
-    char pickupCity[MAX_NAME_LENGTH];
-    int  pickupZipCode;
-    char pickupLandMarkDesc[MAX_DESCRIPTION_LENGTH];
+    unsigned char passangerFirstName[MAX_NAME_LENGTH];
+    unsigned char passangerMiddleName[MAX_NAME_LENGTH];
+    unsigned char passangerLastName[MAX_NAME_LENGTH];
+    unsigned char destStreetName[MAX_NAME_LENGTH];
+    unsigned char destBuildingNumber[MAX_BUILD_LENGTH];
+    unsigned char destCity[MAX_NAME_LENGTH];
+    unsigned char destZipCode[MAX_BUILD_LENGTH];
+    unsigned char destLandMarkDesc[MAX_DESCRIPTION_LENGTH];
+    unsigned char pickupStreetName[MAX_NAME_LENGTH];
+    unsigned char pickupBuildingNumber[MAX_BUILD_LENGTH];
+    unsigned char pickupCity[MAX_NAME_LENGTH];
+    unsigned char pickupZipCode[MAX_BUILD_LENGTH];
+    unsigned char pickupLandMarkDesc[MAX_DESCRIPTION_LENGTH];
 };
 typedef struct tripAddress  TRIPADDRESS_t;
-/* protocol operation codes. This is the field the defines the message type or
- command beteen the server and the client*/
+/* protocol operation codes. This is the field the defines the message type or 
+  command beteen the server and the client*/
 
 /* operation codes used between the server and the customer app communications*/
-#define TAXI_REQUEST                1 /* customer is requesting a taxi. With
-this operation code the customer app
-requests the server for a taxi.
-The server repsonses with the same
-operation code when responding to
-the request */
+#define TAXI_REQUEST                1 /* customer is requesting a taxi. With 
+                                        this operation code the customer app
+                                        requests the server for a taxi. 
+                                        The server repsonses with the same
+                                        operation code when responding to 
+                                        the request */
 #define TAXI_JOB_ACCEPTED           2 /* customer App sends this operation
-code to the server once the customer
-has accepted the cab. */
+                                        code to the server once the customer 
+                                        has accepted the cab. */
 #define TAXI_JOB_REJECTED           3 /* customer App sends this operation
-code once the server once the customer
-cancels the taxi request */
+                                        code once the server once the customer
+                                        cancels the taxi request */
 #define GPS_POSITION_UPDATE         8 /* server sends this operation code to
-customer app when sending gps
-coordinates of the taxi to the customer
-app. The cusomter App and the driver
-app sends this operation code to the
-server when they are sending their
-location to the server. */
+                                        customer app when sending gps
+                                        coordinates of the taxi to the customer
+                                        app. The cusomter App and the driver
+                                        app sends this operation code to the
+                                        server when they are sending their
+                                        location to the server. */
 #define CUSTOMER_MESSAGE           12 /* Customer App can send a sepcial message                                         to the sever using this operation
-code. */
+                                         code. */
 #define NO_DRIVER_AVAILABLE       22 /* there is no driver available. */
 #define REGISTER_CUSTOMER         25 /* do the customer registration */
-#define GET_CAB_AVAILABILITY      26  /* find out if a particular type
-of cab is available in the area.*/
+#define GET_CAB_AVAILABILITY      26  /* find out if a particular type 
+                                        of cab is available in the area.*/
 #define GET_CUSTOMER_PAYMENTINFO  27  /*get all the credit cards that customer
-has on file*/
+                                       has on file*/
 #define GET_CUSTOMER_HISTORY      28 /* get the last 15 trips that customer
-took info */
+                                       took info */
 #define SERVER_CONFIRMED           29 /* meessage sent by server confirming the
-cab accept and cab reject*/
+                                         cab accept and cab reject*/
 #define CAB_AVAILABLE              30 /* this is response from the server for
-if the cab requested is available.*/
+                                         if the cab requested is available.*/
 #define DIFFERENT_CAB_AVAILABLE    32 /* this is the response from the server
-when the type of cab requested is not
-available but a different type of cab
-is available. In this cas the server
-returns the cab type in the taxiType
-field. */
+                                         when the type of cab requested is not
+                                        available but a different type of cab 
+                                        is available. In this cas the server
+                                        returns the cab type in the taxiType
+                                        field. */
+#define CUSTOMER_HISTORY_AVAILABLE 33 /*This is the opcode sent by the server
+                                        to customer app in response 
+                                        GET_CUSTOMER_HISTORY 
+                                      when the customer password authenticates
+                                      and the history for the customer is 
+                                      available */
+#define CUSTOMER_AUTH_FAILURE     34 /* This is the opcode sent by the server
+                                      to customer app in response to
+                                      GET_CUSTOMER_HISTORY
+                                      when the customer password does not 
+                                      authenticate or there is not customer
+                                      registration*/
+#define CUSTOMER_CHANGE_PASSWORD   35 /* this opcaode is sent from the
+                                      the customer app to change the passwrod
+                                      of already registered customer 
+                                       */
+#define CUSTOMER_REGISTER_SUCCESS 36 /* this opcode is sent by the server
+                                      to customer app if the customer 
+                                      registeration was success*/
+#define CUSTOMER_REGISTER_FAILURE 37 /* This opcode is sent by the server
+                                      to customer app if the customer
+                                      registeration failed */
+#define PASSWORD_CHANGE_SUCCESS   38 /* This opcode is sent by the server to
+                                        the customer app if the customer
+                                        password change was success*/
+#define PASSWORD_CHANGE_FAILURE   39 /* This opcode is sent by the server to
+                                        the customer app if the customer
+                                        password change was Failure*/
+#define CUSTOMER_AUTH_SUCCESS     40  /* This opcode is sent by the server
+                                        to the customer app if the customer
+                                        is registered and has history*/
+
 /* operation codes used between the server and the driver app communications.
- these opeartion codes are not required by the customer app*/
+   these opeartion codes are not required by the customer app*/
 
 #define CREDIT_CARD_PAYMENT         4
 #define CREDIT_CARD_ACCEPTED        5
@@ -174,9 +223,9 @@ field. */
 #define FILE_TRX                   17
 #define STOP_TRX                   18
 #define FILE_TRX_COMPLETE          19
-#define CON_REJECTED               20  /* server rejected. max connectsion
-that server
-can handle are reached. */
+#define CON_REJECTED               20  /* server rejected. max connectsion 
+                                          that server
+                                       can handle are reached. */
 #define CUSTOMER_DROPOFF_SUCCESS   23
 #define CUSTOMER_DROPOFF_FAIL      24
 
@@ -187,16 +236,16 @@ struct taxiHeader
 typedef struct taxiHeader TAXI_HEADER_t;
 
 /* this is the structure used to send and receive taxi trip message
- between the server and the app */
+   between the server and the app */
 struct taxiTrip
 {
     TAXI_HEADER_t header;
     unsigned short appType; /* application type*/
     unsigned short taxiType;
-    unsigned short taxiNumber;
     unsigned short driverNumber;
+    //char  taxiNumber[MAX_LICENSE_LENGTH];
+    char  taxiNumber[MAX_LICENSE_LENGTH];
     unsigned char  driverName[MAX_NAME_LENGTH];
-
     TRIPADDRESS_t tripAddress;
     TRIPTIME_t    tripTime;
     TRIPTIME_t    driverArrivalTime;
@@ -204,6 +253,7 @@ struct taxiTrip
     char estimatedCost[12];
     GPSCORD_t customerGPS;
     GPSCORD_t driverGPS;
+    CUSTOMERINFO_t custInfo;
 
 };
 typedef struct taxiTrip TAXITRIP_t;
@@ -223,7 +273,7 @@ struct customerRegister {
 typedef struct customerRegister CUSTOMER_REG_t;
 
 /* This is the structure used to send and receive the gps cordinates
- to and from the server */
+   to and from the server */
 
 struct taxiGPSUpdate
 {
@@ -259,4 +309,4 @@ typedef struct taxiProto TAXI_PROTO;
 
 #define PAYLOAD_SIZE  400
 #define TAXIMSG_SIZE   sizeof(TAXITRIP_t)
-
+

@@ -63,16 +63,9 @@ jobject Java_com_securide_custmer_connection_core_JNIConnectionManager_getCabAva
 jstring
 Java_com_securide_custmer_connection_core_JNIConnectionManager_getTaxiDetails( JNIEnv* env,  jobject thiz )
 {
-    unsigned char msgSent[TAXIMSG_SIZE]; /* buffer for sending meesage to server*/
-    unsigned char msgRecv[TAXIMSG_SIZE]; /*buffer to receiving meesage from server*/;
     unsigned long serverAddr; /* ip address of the server */
     int socketId;
     int portNum;
-    TAXITRIP_t  *tripSnt;  /* pointer to the message send buffer */
-    TAXITRIP_t  *tripRcv;  /* pointer to the meesage receive buffer */
-
-    tripSnt = (TAXITRIP_t *)&msgSent;
-    tripRcv = (TAXITRIP_t *)&msgRecv;
 
     /* set the Port number and ip address of the server */
     portNum=14001;
@@ -89,14 +82,43 @@ Java_com_securide_custmer_connection_core_JNIConnectionManager_getTaxiDetails( J
     }
     else
     {
-        /* This code is for sednig the taxi request message to the server
-           and getting the response back from the server and then printing it*/
-        /* setup the message */
-        tripSnt->header.opCode = TAXI_REQUEST;
-        tripSnt->taxiNumber = 0; /* will be filled in by server and reply back*/
-        tripSnt->driverNumber = 0; /*will be filled in by server *nd reply back/
+        unsigned char msgSent[TAXIMSG_SIZE]; /* buffer for sending meesage to server*/
+        unsigned char msgRecv[TAXIMSG_SIZE];/*buffer to receiving meesage from server*/
+        TAXITRIP_t  *tripSnt;  /* pointer to the message send buffer */
+        TAXITRIP_t  *tripRcv;  /* pointer to the meesage receive buffer */
+        CUSTOMER_REG_t *customerRegSnt;
+        CUSTOMER_REG_t *customerRegRcv;
+        char taxiNumber[MAX_LICENSE_LENGTH]; /* to store the license plate
+                                      number received from server
+                                      in response to TAXI REQUEST. It will be
+                                      used to respond to the server
+                                      when the ride is accepted or rejected.*/
 
-      /* setup trip addresses */
+        char driverNumber ;        /* to store the driver number whch is received
+                              from server in response to TAXI REQUEST.
+                              It will be used to respond to the server
+                               to identify the driver when the ride is
+                               accepted or rejected.*/
+        char driverName[MAX_NAME_LENGTH];/*to store the driver name whch is received
+                              from server in response to TAXI REQUEST.
+                              It will be used to respond to the server
+                               to identify the driver when the ride is
+                               accepted or rejected.*/
+
+
+        tripSnt = (TAXITRIP_t *)&msgSent;
+        tripRcv = (TAXITRIP_t *)&msgRecv;
+        customerRegSnt=(CUSTOMER_REG_t *)&msgSent;
+        customerRegRcv=(CUSTOMER_REG_t *)&msgRecv;
+        tripSnt->header.opCode = TAXI_REQUEST;
+        tripSnt->driverNumber = 0; /*will be filled in by server and
+                                         reply back*/
+        tripSnt->appType = CUSTOMER_APP;
+        tripSnt->taxiType = SPECIAL_ASSIST_CAB;/*options here are
+                                                    LEMOSINE, REGULAR_CAB,
+                                                    or SPECIAL_ASSIST_CAB */
+
+        /* setup trip addresses */
 
         /* passanger information*/
         strcpy(tripSnt->tripAddress.passangerFirstName,"Rajvir");
@@ -105,29 +127,62 @@ Java_com_securide_custmer_connection_core_JNIConnectionManager_getTaxiDetails( J
 
         /* where the passangeris going*/
         strcpy(tripSnt->tripAddress.destStreetName,"Marillo Ave");
-        tripSnt->tripAddress.destBuildingNumber=3636;
+        strcpy(tripSnt->tripAddress.destBuildingNumber,"3636");
         strcpy(tripSnt->tripAddress.destCity,"San Jose");
-        tripSnt->tripAddress.destZipCode=95135;
+        strcpy(tripSnt->tripAddress.destZipCode,
+               "95135");
         strcpy(tripSnt->tripAddress.destLandMarkDesc,
                "close to evergreen store");
 
         /* where the passanger is beng picked up*/
         strcpy(tripSnt->tripAddress.pickupStreetName,"Alum Rock");
-        tripSnt->tripAddress.pickupBuildingNumber=303;
+        strcpy(tripSnt->tripAddress.pickupBuildingNumber,"303D");
         strcpy(tripSnt->tripAddress.pickupCity,"San Jose");
-        tripSnt->tripAddress.pickupZipCode=95134;
+        strcpy(tripSnt->tripAddress.pickupZipCode,
+               "95134");
         strcpy(tripSnt->tripAddress.pickupLandMarkDesc,
                "close to  AutoZone automobile parts store");
 
-        /*Now this function will send the message to the server and wait for
-         response from the server. It will send the message content that
-         contained in the msgSent buffer and when the response from the server
-         is received this function will copy it to the msgrecv buffer.
-         This function sendAndRcvMessage does not return until the
-         message is received from the server */
+        /* Now setup the GPS cordinates of where the customer is */
+        tripSnt->customerGPS.longitudeDegrees= 10;
+        tripSnt->customerGPS.longitudeDegrees= 30;
+        tripSnt->customerGPS.NorS = 'N';
+        tripSnt->customerGPS.latitudeDegrees= 20;
+        tripSnt->customerGPS.longitudeDegrees= 35;
+        tripSnt->customerGPS.EorW = 'E';
 
-        sendAndRcvMessage(socketId,msgSent, msgRecv ,TAXIMSG_SIZE);
+        /*Now this function will send the message to the server and wait
+          for response from the server. It will send the message content
+          that contained in the msgSent buffer and when the response from
+          the server is received this function will copy it to the msgrecv
+          buffer.
+          This function sendAndRcvMessage does not retunr until the
+          message is received from the server */
 
+        sendAndRcvMessage(socketId,msgSent,
+                          msgRecv ,TAXIMSG_SIZE);
+
+        /* print the content of the message received */
+        conprintf("\n\nSERVER RESPONSE: opCode %d\n",
+                  tripRcv->header.opCode);
+        conprintf("taxi number:-> %s\n",tripRcv->taxiNumber);
+        conprintf("driver number:-> %d\n",tripRcv->driverNumber);
+        conprintf("taxi Driver name: %s\n",tripRcv->driverName);
+
+        conprintf("estimated trip time: %d hour %d minutes\n",
+                  tripRcv->tripTime.estimatedHours,
+                  tripRcv->tripTime.estimatedMinutes);
+        conprintf("estimated trip Cost: %s \n",
+                  tripRcv->estimatedCost);
+        conprintf("estimated driver Arrival time: %d hour %d minutes\n",
+                  tripRcv->driverArrivalTime.estimatedHours,
+                  tripRcv->driverArrivalTime.estimatedMinutes);
+        /* save the driver number and cab license number to
+           identify the driver with when sending the server the
+           cab ride accepted or rejected message */
+        strcpy(taxiNumber,tripRcv->taxiNumber);
+        strcpy(driverName,tripRcv->driverName);
+        driverNumber =  tripRcv->driverNumber;
         char* result;
         asprintf(&result, "%d;%d;%s;%d;%d;%d;%d;%d",
                  tripRcv->taxiNumber,
